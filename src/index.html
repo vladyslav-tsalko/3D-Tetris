@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>3D Tetris</title>
+
+    <script type="text/javascript" src="gl-matrix-min.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+    <script type="text/javascript" src="ShaderProgram.js"></script>
+    <script type="text/javascript" src="Listeners.js"></script>
+    <script type="text/javascript" src="createFigures.js"></script>
+    <script type="text/javascript" src="Grid.js"></script>
+    <script type="text/javascript" src="TetraCube.js"></script>
+    <script type="text/javascript" src="BufferCube.js"></script>
+    <script type="text/javascript" src="Scene.js"></script>
+    <script type="text/javascript" src="View.js"></script>
+
+    <script id="v-shader-nolight" type="x-shader/x-vertex">
+        precision mediump float;
+
+        attribute vec3 vertexPosition; 
+        attribute vec3 vertexColor;   
+
+        uniform mat4 modelViewMatrix;
+        uniform mat4 projectionMatrix;
+
+        varying vec3 fragmentColor;    
+
+        void main() {
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(vertexPosition, 1.0); 
+            fragmentColor = vertexColor; 
+        }
+    </script>
+
+    <script id="v-shader" type="x-shader/x-vertex">
+        precision mediump float;
+
+        attribute vec3 vertexPosition; 
+        attribute vec3 vertexColor;    
+        attribute vec3 vertexNormal;
+
+        uniform mat4 modelViewMatrix;
+        uniform mat4 projectionMatrix;
+        uniform mat3 normalMatrix;
+
+        uniform vec4 lightViewPosition;
+
+        varying vec3 fragmentColor;
+
+        void main() {
+            // Transform vertex position to view space
+            vec4 viewPosition = modelViewMatrix * vec4(vertexPosition, 1.0);
+
+            // Calculate and normalize light vector
+            vec3 lightVector = normalize(lightViewPosition.xyz - viewPosition.xyz);
+            // Transform and normalize the normal
+            vec3 transformedNormal = normalize(normalMatrix * vertexNormal);
+
+            // Calculate light intensity
+            // This can be negative, so just make negative values 0
+            float lightIntensity = max(dot(lightVector, transformedNormal), 0.0);
+
+            gl_Position = projectionMatrix * viewPosition; 
+            // Multiply vertex color with lightIntensity
+            fragmentColor = vertexColor * lightIntensity;
+        }
+    </script>
+
+    <script id="f-shader" type="x-shader/x-fragment">
+        precision mediump float;
+
+        varying vec3 fragmentColor;
+
+        void main() {
+            gl_FragColor = vec4(fragmentColor, 1.0);
+        }
+    </script>
+</head>
+
+<body onload = "resizeCanvas(); initialize();" style="margin: 0; padding: 0; overflow: hidden;">
+    <canvas id="canvas">
+        <script>
+            function resizeCanvas() {
+                var canvas = document.getElementById("canvas");
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+        </script>
+    </canvas>
+</body>
+</html>

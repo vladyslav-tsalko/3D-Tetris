@@ -1,0 +1,11 @@
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows system files
+$RECYCLE.BIN/
+*.lnk
+
+#VS Code
+.vscode
