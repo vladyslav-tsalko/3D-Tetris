@@ -59,6 +59,12 @@ class Scene{
         }
     }
 
+    async parseCube(){
+        const cubeRaw = await this.#loadData('Objects/cube.obj');
+        const [vertices, normals, boundingVertices] = parseOBJ(cubeRaw);
+        this.mainBufferCube = new BufferCube(vertices, normals, boundingVertices);
+    }
+
     #clearFilledInfo(){
         for(let i = 0; i < this.filled.xy.length; i++){
             this.filled.xy[i] = 0;
@@ -158,9 +164,9 @@ class Scene{
         return [[], 0];
     }
 
-    async parseCube(){
-        const cubeRaw = await loadData('Objects/cube.obj');
-        const [vertices, normals, boundingVertices] = parseOBJ(cubeRaw);
-        this.mainBufferCube = new BufferCube(vertices, normals, boundingVertices);
-    }    
+
+    async #loadData(fileName) {
+        const Object = await fetch(fileName).then(result => result.text());
+        return Object;
+    }
 }

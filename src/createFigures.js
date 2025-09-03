@@ -1,7 +1,4 @@
-   async function loadData(fileName) {
-    const Object = await fetch(fileName).then(result => result.text());
-    return Object;
-}
+
 
 function parseOBJ(objectData) {
     const lines = objectData.split('\n');
