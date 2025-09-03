@@ -309,3 +309,4 @@ class TetraCube{
 }
 
 
+//TODO: keep only horizontal removal and score adder

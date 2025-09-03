@@ -24,7 +24,7 @@ const shaderInfo = {
     }
 }
 
-let currentShaderProgram = null;
+let currentShaderProgram = null; //TODO: remove global variable
 
 class ShaderProgram{
     constructor(vertexId, fragmentId, shaderInfo){

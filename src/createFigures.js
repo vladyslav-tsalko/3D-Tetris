@@ -204,3 +204,5 @@ function restartGame(){
     gameRules.isGameEnded = false;
     createFallingShape();
 }
+
+//TODO: CreateFigureManager with 1 public method
