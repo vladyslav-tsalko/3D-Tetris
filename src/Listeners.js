@@ -114,10 +114,10 @@ function keyListener(){
         }
     });
 
-    canvas.addEventListener("mousedown", (event) => {
-        view.isCameraMoving = true;
-        startMousePosition = { x: event.clientX, y: event.clientY };
-    });
+    // canvas.addEventListener("mousedown", (event) => {
+    //     view.isCameraMoving = true;
+    //     startMousePosition = { x: event.clientX, y: event.clientY };
+    // });
 
     // canvas.addEventListener("mousemove", (event) => {
     //     if(!view.isCameraMoving) return;
@@ -126,9 +126,9 @@ function keyListener(){
     //     startMousePosition = { x: event.clientX, y: event.clientY };
     // });
 
-    canvas.addEventListener("mouseup", () => {
-        view.isCameraMoving = false;
-    });
+    // canvas.addEventListener("mouseup", () => {
+    //     view.isCameraMoving = false;
+    // });
 }
 
 function translate(vector){
@@ -140,5 +140,3 @@ function rotate(vector){
     if(!gameRules.isGamePaused)
         fallingTetraCube.rotate(Math.PI / 2, vector);
 }
-
-//TODO: create listener manager

@@ -6,6 +6,7 @@ let scene = null;
 
 let grid = null;
 let view = null;
+let figureManager = null;
 
 /** @type {WebGLRenderingContext} */
 let gl = null;
@@ -51,8 +52,10 @@ var initialize = async () => {
     await scene.parseCube()
 
     grid = new Grid();
+
+    figureManager = new FigureManager();
     
-    createFallingShape();
+    figureManager.createFallingShape();
 
     keyListener(); //listener for keyboard events to the window
     
@@ -94,7 +97,7 @@ function render(now) {
         else{
             if(fallingTetraCube.isPositioned){
                 scene.add(fallingTetraCube);
-                createFallingShape();
+                figureManager.createFallingShape();
             }
         }
         

@@ -1,6 +1,4 @@
 class Scene{
-    static shapesNames = ['tetraCubeI', 'tetraCubeO', 'tetraCubeL', 'tetraCubeT', 'tetraCubeN', 'tetraCubeTowerLeft', 'tetraCubeTowerRight','tetraCubeTripod'];
-
     static shapesColors = [
         [1, 0, 0],//red
         [1, 0.5, 0],//orange
@@ -61,7 +59,7 @@ class Scene{
 
     async parseCube(){
         const cubeRaw = await this.#loadData('Objects/cube.obj');
-        const [vertices, normals, boundingVertices] = parseOBJ(cubeRaw);
+        const [vertices, normals, boundingVertices] = this.#parseOBJ(cubeRaw);
         this.mainBufferCube = new BufferCube(vertices, normals, boundingVertices);
     }
 
@@ -168,5 +166,55 @@ class Scene{
     async #loadData(fileName) {
         const Object = await fetch(fileName).then(result => result.text());
         return Object;
+    }
+
+    #parseOBJ(objectData) {
+        const lines = objectData.split('\n');
+        let isTexture = false;
+        if(objectData.includes('vt')){
+            isTexture = true;
+        }
+        const vertices = [];
+        const normals = [];
+        const faces = [];
+        
+        for (const line of lines) {
+            if (line.startsWith('v ')) {
+                const [, x, y, z] = line.split(' ').map(parseFloat);
+                vertices.push([x, y, z]);
+                continue;
+            } else if (line.startsWith('vn ')) {
+                const [, x, y, z] = line.split(' ').map(parseFloat);
+                normals.push([x, y, z]);
+                continue;
+            }else if (line.startsWith('f ')) {
+                const vertInd = []
+                const normInd = []
+                if(isTexture){
+                    line.split(' ').slice(1).map(threeStr => threeStr.split('/').map(Number)).forEach(([vIndex, _, vnIndex]) => {
+                        vertInd.push(vIndex-1);
+                        normInd.push(vnIndex-1);
+                    });
+                }else{
+                    line.split(' ').slice(1).map(pairStr => pairStr.split('//').map(Number)).forEach(([vIndex, vnIndex]) => {
+                        vertInd.push(vIndex-1);
+                        normInd.push(vnIndex-1);
+                    });
+                }
+                
+                faces.push([vertInd, normInd])
+                continue;
+            }
+        }
+        
+        const faceVertices = [];
+        const faceNormals = [];
+        faces.forEach(face => {
+                const [vIndices, nIndices] = face; 
+                vIndices.forEach(index => faceVertices.push(vertices[index]));
+                nIndices.forEach(index => faceNormals.push(normals[index]));
+            }
+        )
+        return [faceVertices, faceNormals, vertices];
     }
 }

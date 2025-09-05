@@ -307,6 +307,3 @@ class TetraCube{
         return array;
     }
 }
-
-
-//TODO: keep only horizontal removal and score adder

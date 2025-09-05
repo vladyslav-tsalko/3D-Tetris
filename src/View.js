@@ -1,6 +1,6 @@
 class View{
     constructor(aspectRatio){
-        this.isCameraMoving = false;
+        //this.isCameraMoving = false;
         this.isPerspective = null;
         this.aspectRatio = aspectRatio;
         this.perspectiveData = {
