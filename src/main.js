@@ -7,6 +7,7 @@ let scene = null;
 let grid = null;
 let view = null;
 let figureManager = null;
+let gameManager = null;
 
 /** @type {WebGLRenderingContext} */
 let gl = null;
@@ -17,11 +18,6 @@ const matrices = {
 }
 let aspectRatio = 0;
 let projSize = 15;
-
-let gameRules = {
-    'isGamePaused': false,
-    'isGameEnded': false
-};
 
 /** @type {TetraCube} */
 let fallingTetraCube = null;
@@ -57,6 +53,8 @@ var initialize = async () => {
     
     figureManager.createFallingShape();
 
+    gameManager = new GameManager();
+
     keyListener(); //listener for keyboard events to the window
     
     requestAnimationFrame(render); // start render loop
@@ -74,7 +72,6 @@ function render(now) {
     }else{
         delta *= 0.002;
     }
-    then = now;
     
     shaderPrograms.noLightProgram.enable();
     grid.draw();
@@ -89,23 +86,10 @@ function render(now) {
     
     fallingTetraCube.draw();
 
-    if(!gameRules.isGamePaused){
-        fallingTetraCube.translate([0, -delta, 0]);
-        if(gameRules.isGameEnded){
-            fallingTetraCube = null;
-        }
-        else{
-            if(fallingTetraCube.isPositioned){
-                scene.add(fallingTetraCube);
-                figureManager.createFallingShape();
-            }
-        }
-        
-    }
-    if(gameRules.isGameEnded){
-        restartGame();
-    }
+    gameManager.processOnGoingGame(delta);
+    gameManager.processEndedGame();
     
+    then = now;
     requestAnimationFrame(render)
 }
 

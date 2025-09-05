@@ -144,10 +144,3 @@ class FigureManager{
         return matrix;
     }
 }
-
-function restartGame(){
-    scene.clear();
-    gameRules.isGamePaused = false;
-    gameRules.isGameEnded = false;
-    createFallingShape();
-}

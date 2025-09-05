@@ -14,7 +14,7 @@ function keyListener(){
 
         //pousing/unpausing game
         if(event.key === 'p'){
-            gameRules.isGamePaused = !gameRules.isGamePaused;
+            gameManager.isGamePaused = !gameManager.isGamePaused;
         }
 
         //changing grid
@@ -28,7 +28,7 @@ function keyListener(){
 
         //speeding up tetracube
         if(event.key === ' '){
-             if(!gameRules.isGamePaused){
+             if(!gameManager.isGamePaused){
                 fallingTetraCube.isSpeededUp = true;
             }
         }
@@ -132,11 +132,11 @@ function keyListener(){
 }
 
 function translate(vector){
-    if(!gameRules.isGamePaused)
+    if(!gameManager.isGamePaused)
         fallingTetraCube.translate(vector);
 }
 
 function rotate(vector){
-    if(!gameRules.isGamePaused)
+    if(!gameManager.isGamePaused)
         fallingTetraCube.rotate(Math.PI / 2, vector);
 }
