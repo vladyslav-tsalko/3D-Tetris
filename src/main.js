@@ -28,13 +28,16 @@ var initialize = async () => {
     // basic setup 
     /** @type {HTMLCanvasElement} */
     let canvas = document.getElementById("canvas");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
     aspectRatio = canvas.clientWidth / canvas.clientHeight;
     
-    gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    gl = canvas.getContext("webgl", { alpha: true }) || canvas.getContext("experimental-webgl", { alpha: true });
+
 
     gl.enable(gl.DEPTH_TEST);
     gl.viewport(0, 0, canvas.clientWidth, canvas.clientHeight);
-    gl.clearColor(0, 0, 0, 1);
+    gl.clearColor(0, 0, 0, 0);
 
     view = new View(canvas.clientWidth / canvas.clientHeight)
 

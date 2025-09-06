@@ -79,15 +79,37 @@
     </script>
 </head>
 
-<body onload = "resizeCanvas(); initialize();" style="margin: 0; padding: 0; overflow: hidden;">
-    <canvas id="canvas">
-        <script>
-            function resizeCanvas() {
-                var canvas = document.getElementById("canvas");
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
+<body onload = "prepareCanvas(); initialize();" style="margin: 0; padding: 0; overflow: hidden;">
+    <!-- Canvas для звёзд (фон) -->
+    <canvas id="background" style="position:absolute; top:0; left:0; z-index:0;"></canvas>
+    <!-- Canvas для WebGL игры -->
+    <canvas id="canvas" style="position:absolute; top:0; left:0; z-index:1;"></canvas>
+    <script>
+        function prepareCanvas() {
+            var canvas = document.getElementById("background");
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            let ctx = canvas.getContext("2d");
+
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < 300; i++) { // 300 звезд
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const radius = Math.random() * 2; // разные размеры
+                const alpha = 0.5 + Math.random() * 0.5; // случайная прозрачность
+                const colors = ["white", "#aaf", "#ffa"]; // белый, голубой, желтоватый
+                const color = colors[Math.floor(Math.random() * colors.length)];
+
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.globalAlpha = alpha;
+                ctx.fill();
             }
-        </script>
-    </canvas>
+        }
+    </script>
 </body>
 </html>
