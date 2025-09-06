@@ -1,6 +1,7 @@
 //listens all keys
 function keyListener(){
     window.addEventListener("keydown", (event) => {
+        event.preventDefault(); // теперь работает
         //moving tetracibes
         if(event.key === 'd' || event.key === 'ArrowRight'){
             translate([2, 0, 0]);

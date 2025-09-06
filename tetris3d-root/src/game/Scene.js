@@ -58,7 +58,7 @@ class Scene{
     }
 
     async parseCube(){
-        const cubeRaw = await this.#loadData('src/objects/cube.obj');
+        const cubeRaw = await this.#loadData('objects/cube.obj');
         const [vertices, normals, boundingVertices] = this.#parseOBJ(cubeRaw);
         this.mainBufferCube = new BufferCube(vertices, normals, boundingVertices);
     }

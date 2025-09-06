@@ -5,17 +5,20 @@
     <meta charset="utf-8">
     <title>3D Tetris</title>
 
-    <script type="text/javascript" src="src/js/gl-matrix-min.js"></script>
-    <script type="text/javascript" src="src/js/main.js"></script>
-    <script type="text/javascript" src="src/js/ShaderProgram.js"></script>
-    <script type="text/javascript" src="src/js/Listeners.js"></script>
-    <script type="text/javascript" src="src/js/FigureManager.js"></script>
-    <script type="text/javascript" src="src/js/Grid.js"></script>
-    <script type="text/javascript" src="src/js/TetraCube.js"></script>
-    <script type="text/javascript" src="src/js/BufferCube.js"></script>
-    <script type="text/javascript" src="src/js/Scene.js"></script>
-    <script type="text/javascript" src="src/js/View.js"></script>
-    <script type="text/javascript" src="src/js/GameManager.js"></script>
+    <script type="text/javascript" src="src/game/gl-matrix-min.js"></script>
+    <script type="text/javascript" src="src/game/TetrisGame.js"></script>
+    <script type="text/javascript" src="src/game/ShaderProgram.js"></script>
+    <script type="text/javascript" src="src/game/Listeners.js"></script>
+    <script type="text/javascript" src="src/game/FigureManager.js"></script>
+    <script type="text/javascript" src="src/game/Grid.js"></script>
+    <script type="text/javascript" src="src/game/TetraCube.js"></script>
+    <script type="text/javascript" src="src/game/BufferCube.js"></script>
+    <script type="text/javascript" src="src/game/Scene.js"></script>
+    <script type="text/javascript" src="src/game/View.js"></script>
+    <script type="text/javascript" src="src/game/GameManager.js"></script>
+
+    <!-- <script type="text/javascript" src="src/ui/Background.js"></script>
+    <script type="text/javascript" src="src/ui/WelcomeScreen.js"></script> -->
 
     <script id="v-shader-nolight" type="x-shader/x-vertex">
         precision mediump float;
@@ -79,37 +82,29 @@
     </script>
 </head>
 
-<body onload = "prepareCanvas(); initialize();" style="margin: 0; padding: 0; overflow: hidden;">
-    <!-- Canvas для звёзд (фон) -->
+<body style="margin:0; padding:0; overflow:hidden;">
+    <!-- Canvas для звезд (фон) -->
     <canvas id="background" style="position:absolute; top:0; left:0; z-index:0;"></canvas>
-    <!-- Canvas для WebGL игры -->
-    <canvas id="canvas" style="position:absolute; top:0; left:0; z-index:1;"></canvas>
-    <script>
-        function prepareCanvas() {
-            var canvas = document.getElementById("background");
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
 
-            let ctx = canvas.getContext("2d");
+    <!-- Canvas для WebGL игры (скрыт до старта) -->
+    <canvas id="canvas" style="position:absolute; top:0; left:0; z-index:1; display:none;"></canvas>
 
-            ctx.fillStyle = "black";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+    <!-- Приветственный экран -->
+    <div id="welcome" style="
+        position:absolute;
+        top:0; left:0;
+        width:100%; height:100%;
+        display:flex; flex-direction:column;
+        align-items:center; justify-content:center;
+        z-index:2; color:white; font-family:sans-serif;
+        background: transparent;
+    ">
+        <h1 style="font-size:3em; margin-bottom:30px;">3D Tetris in Space</h1>
+        <button id="playButton" style="padding:10px 30px; font-size:1.5em; margin-bottom:15px;">Играть</button>
+        <button id="controlsButton" style="padding:10px 30px; font-size:1.5em;">Управление</button>
+    </div>
 
-            for (let i = 0; i < 300; i++) { // 300 звезд
-                const x = Math.random() * canvas.width;
-                const y = Math.random() * canvas.height;
-                const radius = Math.random() * 2; // разные размеры
-                const alpha = 0.5 + Math.random() * 0.5; // случайная прозрачность
-                const colors = ["white", "#aaf", "#ffa"]; // белый, голубой, желтоватый
-                const color = colors[Math.floor(Math.random() * colors.length)];
-
-                ctx.beginPath();
-                ctx.arc(x, y, radius, 0, Math.PI * 2);
-                ctx.fillStyle = color;
-                ctx.globalAlpha = alpha;
-                ctx.fill();
-            }
-        }
-    </script>
+    <script type="module" src="src/main.js"></script>
 </body>
+
 </html>
