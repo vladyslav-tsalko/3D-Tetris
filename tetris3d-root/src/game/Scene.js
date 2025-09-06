@@ -1,3 +1,9 @@
+const Plane = Object.freeze({
+    YZ: 0,
+    XZ: 1,
+    XY: 2
+});
+
 class Scene{
     static shapesColors = [
         [1, 0, 0],//red
@@ -12,7 +18,7 @@ class Scene{
     
     constructor() {
        /** @type {BufferCube} */
-        let mainBufferCube = null;
+        this.mainBufferCube = null;
         
         this.tetraCubes = [];
 
@@ -29,9 +35,9 @@ class Scene{
             this.filled.yz[(tetraCubeOrigin[0] - 1)/2]++;
             this.filled.xz[(tetraCubeOrigin[1] - 1)/2]++;
         });
-        const [numbers, vecIndex] = this.#filledPlane();
+        const [numbers, plane] = this.#filledPlane();
         if(numbers.length !== 0){
-            this.#removeFilledPlane(numbers, vecIndex);
+            this.#removeFilledPlane(numbers, plane);
         }
     }
 
@@ -81,15 +87,21 @@ class Scene{
         }
     }
 
-    #removeFilledPlane(numbers, vecIndex){
+    #removeFilledPlane(numbers, plane){
         let removedCubeOrigins = [];
         for(const number of numbers){
             let vector = new Array(3).fill(0);
-            vector[vecIndex] = number;
+            vector[plane] = number;
             for(let i = this.tetraCubes.length - 1; i>=0; i--){
                 removedCubeOrigins.push(this.tetraCubes[i].removeCubes(vector));
                 if(this.tetraCubes[i].isEmpty()){
                     this.tetraCubes.splice(i, 1);
+                    if(plane == Plane.XZ){
+                        gameManager.increaseScoreHorizontal();
+                    }
+                    else{
+                        gameManager.increaseScoreVertical();
+                    }
                 }
             }
         }
@@ -103,7 +115,7 @@ class Scene{
             }
         }
         
-        if(vecIndex == 1){
+        if(plane == Plane.XZ){
             let removedCubeOriginsY = [];
             let addedCubeOriginsY = [];
             const max = Math.max(...numbers);
@@ -141,7 +153,7 @@ class Scene{
             }
         }
         if(xyPos.length !== 0){
-            return [xyPos, 2];
+            return [xyPos, Plane.XY];
         }
         for(let i = 0; i<this.filled.xz.length; i++){
             if(this.filled.xz[i] === Grid.dimensions.width * Grid.dimensions.width){
@@ -149,7 +161,7 @@ class Scene{
             }
         }
         if(xzPos.length !== 0){
-            return [xzPos, 1];
+            return [xzPos, Plane.XZ];
         }
         for(let i = 0; i<this.filled.yz.length; i++){
             if(this.filled.yz[i] === Grid.dimensions.width * Grid.dimensions.height){
@@ -157,9 +169,9 @@ class Scene{
             }
         }
         if(yzPos.length !== 0){
-            return [yzPos, 0];
+            return [yzPos, Plane.YZ];
         }
-        return [[], 0];
+        return [[], Plane.YZ];
     }
 
 

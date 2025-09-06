@@ -76,34 +76,34 @@ function keyListener(){
                 break;
         }
 
-        let cameraRotate = true;
-        let rotAxis = [0,0,0]
-        switch (event.key) {
-            case 'j':
-                rotAxis[1] = 1;
-                break;
-            case 'l':
-                rotAxis[1] = -1;
-                break;
-            case 'i':
-                rotAxis[0] = 1;
-                break;
-            case 'k':
-                rotAxis[0] = -1;
-                break;
-            case 'u':
-                rotAxis[2] = 1;
-                break;
-            case 'o':
-                rotAxis[2] = -1;
-                break;
-            default:
-                cameraRotate = false;
-                break;
-        }
-        if(cameraRotate){
-            view.rotateCamera(rotAxis, Math.PI / 32);
-        }
+        // let cameraRotate = true;
+        // let rotAxis = [0,0,0]
+        // switch (event.key) {
+        //     case 'j':
+        //         rotAxis[1] = 1;
+        //         break;
+        //     case 'l':
+        //         rotAxis[1] = -1;
+        //         break;
+        //     case 'i':
+        //         rotAxis[0] = 1;
+        //         break;
+        //     case 'k':
+        //         rotAxis[0] = -1;
+        //         break;
+        //     case 'u':
+        //         rotAxis[2] = 1;
+        //         break;
+        //     case 'o':
+        //         rotAxis[2] = -1;
+        //         break;
+        //     default:
+        //         cameraRotate = false;
+        //         break;
+        // }
+        // if(cameraRotate){
+        //     view.rotateCamera(rotAxis, Math.PI / 32);
+        // }
     });
 
     window.addEventListener('wheel', (event) => {

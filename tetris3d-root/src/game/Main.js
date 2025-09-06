@@ -3,12 +3,14 @@ const toRad = glMatrix.glMatrix.toRadian;
 
 /** @type {Scene} */
 let scene = null;
-
+/** @type {Grid} */
 let grid = null;
+/** @type {View} */
 let view = null;
+/** @type {FigureManager} */
 let figureManager = null;
+/** @type {GameManager} */
 let gameManager = null;
-
 /** @type {WebGLRenderingContext} */
 let gl = null;
 
@@ -21,50 +23,56 @@ let projSize = 15;
 
 /** @type {TetraCube} */
 let fallingTetraCube = null;
+let then = 0;
+let isInit = false;
 
 
 
 var initialize = async () => {    
     // basic setup 
     /** @type {HTMLCanvasElement} */
-    let canvas = document.getElementById("canvas");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    aspectRatio = canvas.clientWidth / canvas.clientHeight;
+    if(!isInit){
+        let canvas = document.getElementById("canvas");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        aspectRatio = canvas.clientWidth / canvas.clientHeight;
+        
+        gl = canvas.getContext("webgl", { alpha: true }) || canvas.getContext("experimental-webgl", { alpha: true });
+
+
+        gl.enable(gl.DEPTH_TEST);
+        gl.viewport(0, 0, canvas.clientWidth, canvas.clientHeight);
+        gl.clearColor(0, 0, 0, 0);
+
+        view = new View(canvas.clientWidth / canvas.clientHeight)
+
+        shaderPrograms.noLightProgram = new ShaderProgram(shaders.noLight, shaders.fragment, shaderInfo);
+        shaderPrograms.withLightProgram = new ShaderProgram(shaders.withLight, shaders.fragment, shaderInfo);
+
+        view.enableOrtho();
+
+        scene = new Scene();
+
+        await scene.parseCube()
+
+        grid = new Grid();
+
+        figureManager = new FigureManager();
+        
+        figureManager.createFallingShape();
+
+        gameManager = new GameManager();
+
+        keyListener(); //listener for keyboard events to the window
+        isInit = true;
+    }
     
-    gl = canvas.getContext("webgl", { alpha: true }) || canvas.getContext("experimental-webgl", { alpha: true });
-
-
-    gl.enable(gl.DEPTH_TEST);
-    gl.viewport(0, 0, canvas.clientWidth, canvas.clientHeight);
-    gl.clearColor(0, 0, 0, 0);
-
-    view = new View(canvas.clientWidth / canvas.clientHeight)
-
-    shaderPrograms.noLightProgram = new ShaderProgram(shaders.noLight, shaders.fragment, shaderInfo);
-    shaderPrograms.withLightProgram = new ShaderProgram(shaders.withLight, shaders.fragment, shaderInfo);
-
-    view.enableOrtho();
-
-    scene = new Scene();
-
-    await scene.parseCube()
-
-    grid = new Grid();
-
-    figureManager = new FigureManager();
-    
-    figureManager.createFallingShape();
-
-    gameManager = new GameManager();
-
-    keyListener(); //listener for keyboard events to the window
-    
+    then = performance.now(); // сразу перед первым вызовом render
     requestAnimationFrame(render); // start render loop
 }
 
 // Previous frame time
-let then = 0;
+
 function render(now) {
     // calculate elapsed time in seconds
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
