@@ -1,12 +1,34 @@
+import { gameManager } from "../game/GameManager.js";
+
 export function setupGameScreen() {
     const backBtn = document.getElementById("backButton");
+    const restartBtn = document.getElementById("restartButton");
+    const playPauseBtn = document.getElementById("playPauseButton");
+
+    // Вернуться в меню
     backBtn.addEventListener("click", () => {
-        // Скрываем игру и HUD
+        document.getElementById("playPauseButton").innerText = "⏸";
         document.getElementById("canvas").style.display = "none";
         document.getElementById("gameHUD").style.display = "none";
-
-        // Показываем главный экран
         document.getElementById("welcome").style.display = "flex";
+
+        gameManager.abortGame();
+    });
+
+    // Рестарт
+    restartBtn.addEventListener("click", () => {
+        gameManager.restart();
+    });
+
+    // Play/Pause
+    playPauseBtn.addEventListener("click", () => {
+        if (gameManager.isPaused()) {
+            gameManager.resume();
+            playPauseBtn.innerText = "⏸"; // показываем паузу
+        } else {
+            gameManager.pause();
+            playPauseBtn.innerText = "▶"; // показываем play
+        }
     });
 }
 

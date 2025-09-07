@@ -21,7 +21,7 @@ export class View{
 
         this.orthoData = {
             lookAt:{
-                eye: [20, Grid.dimensions.height * Grid.dimensions.fieldSize, 15],
+                eye: [20, Grid.dimensions.height * Grid.dimensions.fieldSize - 1, 15],
                 at: [-30, -10, -20]
             },
             projSize: 13,

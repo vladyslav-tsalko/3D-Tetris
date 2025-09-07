@@ -4,6 +4,13 @@ import { grid } from "./Grid.js";
 import { view } from "./Main.js";
 
 export function keyListener(){
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+            gameManager.pause();
+            document.getElementById("playPauseButton").innerText = "▶";
+        }
+    });
+
     window.addEventListener("keydown", (event) => {
         event.preventDefault(); // теперь работает
         //moving tetracibes
@@ -17,10 +24,10 @@ export function keyListener(){
             translate([0, 0, 2]);
         }
 
-        //pousing/unpausing game
-        if(event.key === 'p'){
-            gameManager.pauseGame();
-        }
+        // pousing/unpausing game
+        // if(event.key === 'p'){
+        //     gameManager.togаgleGame();
+        // }
 
         //changing grid
         if(event.key === 'g'){

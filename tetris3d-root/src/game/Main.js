@@ -28,8 +28,6 @@ export const matrices = {
 let then = 0;
 let isInit = false;
 
-
-
 export const initialize = async () => {    
     // basic setup 
     /** @type {HTMLCanvasElement} */
@@ -69,6 +67,10 @@ export const initialize = async () => {
 // Previous frame time
 
 function render(now) {
+    if(!gameManager.isGameRunning()){
+        gameManager.end();
+        return;
+    }
     // calculate elapsed time in seconds
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     

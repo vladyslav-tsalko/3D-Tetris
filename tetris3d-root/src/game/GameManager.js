@@ -3,6 +3,7 @@ import { figureManager } from "./FigureManager.js";
 import { updateScore } from "../ui/GameScreen.js";
 
 class GameManager{
+    #isGameRunning = true;
     #isGamePaused = false;
     #isGameEnded = false;
     #score = 0;
@@ -50,25 +51,51 @@ class GameManager{
         }
     }
 
-    endGame(){
+    end(){
         this.#isGameEnded = true;
+        this.#score = 0;
+        updateScore(this.#score);
     }
 
-    pauseGame(){
+    toggleGame(){
         this.#isGamePaused = !this.#isGamePaused;
+    }
+
+    pause(){
+        this.#isGamePaused = true;
+    }
+
+    resume(){
+        this.#isGamePaused = false;
     }
 
     processEndedGame(){
         if(this.#isGameEnded){
-            this.#restartGame();
+            this.restart();
         }
     }
 
-    #restartGame(){
+    isPaused(){
+        return this.#isGamePaused;
+    }
+
+    restart(){
         scene.clear();
         this.#isGamePaused = false;
         this.#isGameEnded = false;
         figureManager.createFallingShape();
+    }
+
+    abortGame(){
+        this.#isGameRunning = false;
+    }
+
+    beginGame(){
+        this.#isGameRunning = true;
+    }
+
+    isGameRunning(){
+        return this.#isGameRunning;
     }
 }
 

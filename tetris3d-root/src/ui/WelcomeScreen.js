@@ -1,4 +1,5 @@
 import { initialize } from '../game/Main.js';
+import { gameManager } from '../game/GameManager.js';
 
 export function setupWelcomeScreen() {
     const playBtn = document.getElementById("playButton");
@@ -7,6 +8,7 @@ export function setupWelcomeScreen() {
         document.getElementById("canvas").style.display = "block";   // показываем WebGL canvas
         document.getElementById("gameHUD").style.display = "flex";  // показываем HUD
         initialize();
+        gameManager.beginGame();
     });
 
     const controlsBtn = document.getElementById("controlsButton");
@@ -59,7 +61,7 @@ function showControlsScreen() {
         ["A / D", "Move TetraCube left/right"],
         ["Arrow Keys", "Same as W/A/S/D"],
         ["Space", "Speed up falling"],
-        ["P", "Pause / Unpause game"],
+        //["P", "Pause / Unpause game"],
         ["G", "Toggle grid complexity"],
         ["X / x", "Rotate TetraCube around X axis (different directions)"],
         ["Y / y", "Rotate TetraCube around Y axis (different directions)"],

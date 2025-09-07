@@ -73,7 +73,7 @@ export class TetraCube{
                 for(const origin of this.cubeOrigins) {
                     TetraCube.roundArray(origin);
                     if(origin[1] > Grid.dimensions.height * Grid.dimensions.fieldSize){
-                        gameManager.endGame();
+                        gameManager.end();
                         break;
                     }
                 }
