@@ -1,4 +1,6 @@
-class BufferCube {
+import {gl, vec3} from './Main.js';
+
+export class BufferCube {
     constructor(vertices, normals, boundVertices) {
         this.vertices = [];
         this.normals = [];

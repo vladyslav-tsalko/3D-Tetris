@@ -1,20 +1,15 @@
+import { Grid } from "./Grid.js";
+import { BufferCube } from "./BufferCube.js";
+import { gameManager } from "./GameManager.js";
+
 const Plane = Object.freeze({
     YZ: 0,
     XZ: 1,
     XY: 2
 });
 
+
 class Scene{
-    static shapesColors = [
-        [1, 0, 0],//red
-        [1, 0.5, 0],//orange
-        [1, 1, 0],//yellow
-        [0, 1, 0],//green
-        [0, 1, 1],//baby blue
-        [0, 0, 1],//blue
-        [0.5, 0, 1],//purple
-        [1, 0, 1],//pink
-    ];
     
     constructor() {
        /** @type {BufferCube} */
@@ -230,3 +225,5 @@ class Scene{
         return [faceVertices, faceNormals, vertices];
     }
 }
+
+export const scene = new Scene();

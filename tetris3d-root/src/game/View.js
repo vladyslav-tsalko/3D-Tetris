@@ -1,4 +1,8 @@
-class View{
+import {Grid} from './Grid.js';
+import {shaderPrograms} from './ShaderProgram.js';
+import {mat4, matrices, gl} from './Main.js';
+
+export class View{
     constructor(aspectRatio){
         //this.isCameraMoving = false;
         this.isPerspective = null;

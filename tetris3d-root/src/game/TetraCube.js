@@ -1,4 +1,10 @@
-class TetraCube{
+import {gl, mat4, mat3, matrices, vec3, vec4} from './Main.js';
+import {scene} from './Scene.js';
+import {Grid} from './Grid.js';
+import {currentShaderProgram } from "./ShaderProgram.js";
+import { gameManager } from './GameManager.js';
+
+export class TetraCube{
     constructor() {
         this.colors = [];
         this.colorBuffer = gl.createBuffer();
@@ -67,7 +73,7 @@ class TetraCube{
                 for(const origin of this.cubeOrigins) {
                     TetraCube.roundArray(origin);
                     if(origin[1] > Grid.dimensions.height * Grid.dimensions.fieldSize){
-                        gameManager.isGameEnded = true;
+                        gameManager.endGame();
                         break;
                     }
                 }

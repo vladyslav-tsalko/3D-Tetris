@@ -1,7 +1,12 @@
+import { scene } from "./Scene.js";
+import { figureManager } from "./FigureManager.js";
+import { updateScore } from "../ui/GameScreen.js";
+
 class GameManager{
     #isGamePaused = false;
     #isGameEnded = false;
     #score = 0;
+    #fallingTetraCube = null;
 
     constructor(){
         this.#isGamePaused = false;
@@ -18,6 +23,14 @@ class GameManager{
         updateScore(this.#score);
     }
 
+    getCurrentTetraCube(){
+        return this.#fallingTetraCube;
+    }
+
+    setCurrentTetraCube(newTetraCube){
+        this.#fallingTetraCube = newTetraCube;
+    }
+
     getScore(){
         return this.#score;
     }
@@ -25,16 +38,24 @@ class GameManager{
     processOnGoingGame(delta){
         if(this.#isGamePaused) return;
         
-        fallingTetraCube.translate([0, -delta, 0]);
-        if(gameManager.#isGameEnded){
-            fallingTetraCube = null;
+        this.#fallingTetraCube.translate([0, -delta, 0]);
+        if(this.#isGameEnded){
+            this.#fallingTetraCube = null;
         }
         else{
-            if(fallingTetraCube.isPositioned){
-                scene.add(fallingTetraCube);
+            if(this.#fallingTetraCube.isPositioned){
+                scene.add(this.#fallingTetraCube);
                 figureManager.createFallingShape();
             }
         }
+    }
+
+    endGame(){
+        this.#isGameEnded = true;
+    }
+
+    pauseGame(){
+        this.#isGamePaused = !this.#isGamePaused;
     }
 
     processEndedGame(){
@@ -50,3 +71,5 @@ class GameManager{
         figureManager.createFallingShape();
     }
 }
+
+export const gameManager = new GameManager();

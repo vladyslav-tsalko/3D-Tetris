@@ -1,15 +1,18 @@
-const shaders = {
+import {matrices} from './Main.js'
+import {gl} from './Main.js'
+
+export const shaders = {
     noLight: "v-shader-nolight",
     withLight: "v-shader",
     fragment: "f-shader"
 }
 
-const shaderPrograms = {
+export const shaderPrograms = {
     noLightProgram: null,
     withLightProgram: null
 }
 
-const shaderInfo = {
+export const shaderInfo = {
     attributes: {
         vertexLocation: "vertexPosition",
         colorLocation: "vertexColor",
@@ -24,11 +27,11 @@ const shaderInfo = {
     }
 }
 
-let currentShaderProgram = null; //TODO: remove global variable
+export let currentShaderProgram = null; //TODO: remove global variable
 
-class ShaderProgram{
-    constructor(vertexId, fragmentId, shaderInfo){
-        this.program = this.#createShaderProgram(vertexId, fragmentId);
+export class ShaderProgram{
+    constructor(vertexId, fragmentId, shaderInfo, gl){
+        this.program = this.#createShaderProgram(vertexId, fragmentId, gl);
         gl.useProgram(this.program);
 
         this.attributes = {}
@@ -55,9 +58,9 @@ class ShaderProgram{
         currentShaderProgram = this;
     }
 
-    #createShaderProgram(vShaderId, fShaderId) {
-        const vShader = this.#loadShader(vShaderId, gl.VERTEX_SHADER);
-        const fShader = this.#loadShader(fShaderId, gl.FRAGMENT_SHADER);
+    #createShaderProgram(vShaderId, fShaderId, gl) {
+        const vShader = this.#loadShader(vShaderId, gl.VERTEX_SHADER, gl);
+        const fShader = this.#loadShader(fShaderId, gl.FRAGMENT_SHADER, gl);
     
         const program = gl.createProgram();
     
@@ -74,7 +77,7 @@ class ShaderProgram{
         return program;
     }
 
-    #loadShader(shaderId, shaderType) {
+    #loadShader(shaderId, shaderType, gl) {
         const shader = gl.createShader(shaderType);
     
         gl.shaderSource(shader, document.getElementById(shaderId).text);

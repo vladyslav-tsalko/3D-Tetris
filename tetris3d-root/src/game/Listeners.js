@@ -1,5 +1,7 @@
 //listens all keys
-function keyListener(){
+import { gameManager } from "./GameManager.js";
+import { grid } from "./Grid.js";
+export function keyListener(){
     window.addEventListener("keydown", (event) => {
         event.preventDefault(); // теперь работает
         //moving tetracibes
@@ -15,7 +17,7 @@ function keyListener(){
 
         //pousing/unpausing game
         if(event.key === 'p'){
-            gameManager.isGamePaused = !gameManager.isGamePaused;
+            gameManager.pauseGame();
         }
 
         //changing grid
@@ -30,7 +32,7 @@ function keyListener(){
         //speeding up tetracube
         if(event.key === ' '){
              if(!gameManager.isGamePaused){
-                fallingTetraCube.isSpeededUp = true;
+                gameManager.getCurrentTetraCube().isSpeededUp = true;
             }
         }
 
@@ -134,10 +136,10 @@ function keyListener(){
 
 function translate(vector){
     if(!gameManager.isGamePaused)
-        fallingTetraCube.translate(vector);
+        gameManager.getCurrentTetraCube().translate(vector);
 }
 
 function rotate(vector){
     if(!gameManager.isGamePaused)
-        fallingTetraCube.rotate(Math.PI / 2, vector);
+        gameManager.getCurrentTetraCube().rotate(Math.PI / 2, vector);
 }

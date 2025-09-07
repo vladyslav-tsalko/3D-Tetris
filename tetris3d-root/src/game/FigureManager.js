@@ -1,43 +1,60 @@
+import { TetraCube } from "./TetraCube.js";
+import {scene} from './Scene.js';
+import { gameManager } from "./GameManager.js";
+import {mat4} from './Main.js';
+import {Grid} from './Grid.js';
+
 class FigureManager{
     shapesNames = ['tetraCubeI', 'tetraCubeO', 'tetraCubeL', 'tetraCubeT', 'tetraCubeN', 'tetraCubeTowerLeft', 'tetraCubeTowerRight','tetraCubeTripod'];
-
+    #shapesColors = [
+        [1, 0, 0],//red
+        [1, 0.5, 0],//orange
+        [1, 1, 0],//yellow
+        [0, 1, 0],//green
+        [0, 1, 1],//baby blue
+        [0, 0, 1],//blue
+        [0.5, 0, 1],//purple
+        [1, 0, 1],//pink
+    ];
     createFallingShape(){
-        if(fallingTetraCube){
-            fallingTetraCube.isSpeededUp = false;
-            fallingTetraCube = null;
+        let currentTetraCube = gameManager.getCurrentTetraCube();
+        if(currentTetraCube){
+            currentTetraCube.isSpeededUp = false;
+            gameManager.setCurrentTetraCube(null);
         }
 
         const randomTetraCube = Math.round(Math.random()*(this.shapesNames.length - 1)); //choose 1 of them
-        
+        let newTetraCube = null;
         switch(this.shapesNames[randomTetraCube]){
             case 'tetraCubeI':
-                fallingTetraCube = this.#createTetraCubeI();
+                newTetraCube = this.#createTetraCubeI();
                 break;
             case 'tetraCubeO':
-                fallingTetraCube = this.#createTetraCubeO();
+                newTetraCube = this.#createTetraCubeO();
                 break;
             case 'tetraCubeL':
-                fallingTetraCube = this.#createTetraCubeL();
+                newTetraCube = this.#createTetraCubeL();
                 break;
             case 'tetraCubeT':
-                fallingTetraCube = this.#createTetraCubeT();
+                newTetraCube = this.#createTetraCubeT();
                 break;
             case 'tetraCubeN':
-                fallingTetraCube = this.#createTetraCubeN();
+                newTetraCube = this.#createTetraCubeN();
                 break;
             case 'tetraCubeTowerLeft':
-                fallingTetraCube = this.#createTetraCubeTowerLeft();
+                newTetraCube = this.#createTetraCubeTowerLeft();
                 break;
             case 'tetraCubeTowerRight':
-                fallingTetraCube = this.#createTetraCubeTowerRight();
+                newTetraCube = this.#createTetraCubeTowerRight();
                 break;
             case 'tetraCubeTripod':
-                fallingTetraCube = this.#createTetraCubeTripod();
+                newTetraCube = this.#createTetraCubeTripod();
                 break;
             default:
                 break;
         }
-        fallingTetraCube.translate([0,Grid.dimensions.height*Grid.dimensions.fieldSize,0])
+        newTetraCube.translate([0,Grid.dimensions.height*Grid.dimensions.fieldSize,0])
+        gameManager.setCurrentTetraCube(newTetraCube);
     }
 
     #createTetraCubeI(){
@@ -128,7 +145,7 @@ class FigureManager{
     #getRandomColoredTetraCube(vector){
         const tetraCube = new TetraCube()
         const colors = [];
-        const randomColor = Scene.shapesColors[Math.round(Math.random()*(Scene.shapesColors.length - 1))];
+        const randomColor = this.#shapesColors[Math.round(Math.random()*(this.#shapesColors.length - 1))];
         for (let i = 0; i < scene.mainBufferCube.vertices.length; i++) {
             colors.push(randomColor);
         }
@@ -144,3 +161,5 @@ class FigureManager{
         return matrix;
     }
 }
+
+export const figureManager = new FigureManager();

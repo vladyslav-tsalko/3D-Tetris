@@ -1,4 +1,8 @@
-class Grid {
+import { currentShaderProgram } from "./ShaderProgram.js";
+import {mat4, matrices} from './Main.js';
+
+
+export class Grid {
     #isSimple = true;
     static dimensions = {
         'fieldSize': 2,
@@ -9,13 +13,17 @@ class Grid {
         Object.freeze(Grid.dimensions);
         this.vertices = [];
         this.colors = []
-        
+    }
+
+    init(gl){
+        this.gl = gl;
+
         this.modelMatrix = mat4.create();
         this.modelViewMatrix = mat4.create();
 
         this.buffers = {
-            vertexBuffer: gl.createBuffer(),
-            colorBuffer: gl.createBuffer()
+            vertexBuffer: this.gl.createBuffer(),
+            colorBuffer: this.gl.createBuffer()
         };
         this.initSimple();
     }
@@ -44,12 +52,12 @@ class Grid {
         this.vertices = new Float32Array(vertices.flat());
         this.colors = new Float32Array(colors.flat());
         // Bind and fill vertex buffer
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.vertexBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffers.vertexBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.vertices), this.gl.STATIC_DRAW);
 
         // Bind and fill color buffer
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.colorBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.colors), gl.STATIC_DRAW);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffers.colorBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.colors), this.gl.STATIC_DRAW);
         
     }
 
@@ -74,12 +82,12 @@ class Grid {
         this.vertices = new Float32Array(vertices.flat());
         this.colors = new Float32Array(colors.flat());
         // Bind and fill vertex buffer
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.vertexBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffers.vertexBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.vertices), this.gl.STATIC_DRAW);
 
         // Bind and fill color buffer
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers.colorBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.colors), gl.STATIC_DRAW);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffers.colorBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this.colors), this.gl.STATIC_DRAW);
         
     }
 
@@ -88,9 +96,9 @@ class Grid {
         this.#setupAttribute(this.buffers.colorBuffer, currentShaderProgram.attributes.colorLocation);
         
         mat4.mul(this.modelViewMatrix, matrices.viewMatrix, this.modelMatrix);
-        gl.uniformMatrix4fv(currentShaderProgram.uniforms.modelViewMatrix, gl.FALSE, this.modelViewMatrix);
+        this.gl.uniformMatrix4fv(currentShaderProgram.uniforms.modelViewMatrix, this.gl.FALSE, this.modelViewMatrix);
 
-        gl.drawArrays(gl.LINES, 0, this.vertices.length / 3);
+        this.gl.drawArrays(this.gl.LINES, 0, this.vertices.length / 3);
         
     }
 
@@ -99,19 +107,21 @@ class Grid {
     }
 
     #setupAttribute(buffer, location) {
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
 
-        gl.vertexAttribPointer(
+        this.gl.vertexAttribPointer(
             location, // the attribute location
             3, // number of elements for each vertex
-            gl.FLOAT, // type of the attributes
-            gl.FALSE, // should data be normalised?
+            this.gl.FLOAT, // type of the attributes
+            this.gl.FALSE, // should data be normalised?
             0, // stride
             0 // offset
         );
 
         // enable the attribute
-        gl.enableVertexAttribArray(location);
+        this.gl.enableVertexAttribArray(location);
     }
     
 }
+
+export const grid = new Grid();

@@ -1,3 +1,5 @@
+import { initialize } from '../game/Main.js';
+
 export function setupWelcomeScreen() {
     const playBtn = document.getElementById("playButton");
     playBtn.addEventListener("click", () => {
