@@ -84,13 +84,9 @@
 </head>
 
 <body style="margin:0; padding:0; overflow:hidden;">
-    <!-- Canvas для звезд (фон) -->
     <canvas id="background"></canvas>
-
-    <!-- Canvas для WebGL игры (скрыт до старта) -->
     <canvas id="canvas"></canvas>
 
-    <!-- HUD для игры -->
     <div id="gameHUD">
         <div id="score">Score: 0</div>
         <div id="controls">
@@ -100,12 +96,36 @@
         </div>
     </div>
 
-    <!-- Приветственный экран -->
     <div id="welcome">
         <h1>3D Tetris in Space</h1>
-        <button id="playButton">Play</button>
+        <button id="demoPlayButton">Demo Player</button>
+        <button id="registerButton">Register</button>
+        <button id="loginButton">Login</button>
         <button id="controlsButton">Controls</button>
     </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <h2>Register</h2>
+            <input type="text" id="registerUsername" placeholder="Username">
+            <input type="password" id="registerPassword" placeholder="Password">
+            <button id="submitRegister">Register</button>
+            <button id="closeRegister">Close</button>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h2>Login</h2>
+            <input type="text" id="loginUsername" placeholder="Username">
+            <input type="password" id="loginPassword" placeholder="Password">
+            <button id="submitLogin">Login</button>
+            <button id="closeLogin">Close</button>
+        </div>
+    </div>
+
 
     <script type="module" src="src/main.js"></script>
 </body>

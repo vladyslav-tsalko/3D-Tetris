@@ -2,8 +2,8 @@ import { initialize } from '../game/Main.js';
 import { gameManager } from '../game/GameManager.js';
 
 export function setupWelcomeScreen() {
-    const playBtn = document.getElementById("playButton");
-    playBtn.addEventListener("click", () => {
+    const demoPlayeBtn = document.getElementById("demoPlayButton");
+    demoPlayeBtn.addEventListener("click", () => {
         document.getElementById("welcome").style.display = "none";
         document.getElementById("canvas").style.display = "block";   // показываем WebGL canvas
         document.getElementById("gameHUD").style.display = "flex";  // показываем HUD
@@ -15,6 +15,12 @@ export function setupWelcomeScreen() {
     controlsBtn.addEventListener("click", () => {
         showControlsScreen();
     });
+
+    const registerBtn = document.getElementById("registerButton");
+    const loginBtn = document.getElementById("loginButton");
+
+    registerBtn.addEventListener("click", () => showRegisterModal());
+    loginBtn.addEventListener("click", () => showLoginModal());
 }
 
 function showControlsScreen() {
@@ -101,4 +107,98 @@ function showControlsScreen() {
     controlsDiv.appendChild(closeBtn);
 
     document.body.appendChild(controlsDiv);
+}
+
+// ------------------- Register Screen -------------------
+function showRegisterModal() {
+    let existing = document.getElementById("registerScreen");
+    if (existing) {
+        existing.style.display = "flex";
+        return;
+    }
+
+    const modal = document.createElement("div");
+    modal.id = "registerScreen";
+    modal.classList.add("modalScreen");
+
+    const title = document.createElement("h2");
+    title.innerText = "Register";
+    modal.appendChild(title);
+
+    const usernameInput = document.createElement("input");
+    usernameInput.placeholder = "Username";
+    modal.appendChild(usernameInput);
+
+    const passwordInput = document.createElement("input");
+    passwordInput.placeholder = "Password";
+    passwordInput.type = "password";
+    modal.appendChild(passwordInput);
+
+    const submitBtn = document.createElement("button");
+    submitBtn.innerText = "Register";
+    submitBtn.addEventListener("click", () => {
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value.trim();
+        if (username && password) {
+            console.log("Registering", username, password);
+            modal.style.display = "none";
+        } else {
+            alert("Enter username and password");
+        }
+    });
+    modal.appendChild(submitBtn);
+
+    const closeBtn = document.createElement("button");
+    closeBtn.innerText = "Close";
+    closeBtn.addEventListener("click", () => modal.style.display = "none");
+    modal.appendChild(closeBtn);
+
+    document.body.appendChild(modal);
+}
+
+// ------------------- Login Screen -------------------
+function showLoginModal() {
+    let existing = document.getElementById("loginScreen");
+    if (existing) {
+        existing.style.display = "flex";
+        return;
+    }
+
+    const modal = document.createElement("div");
+    modal.id = "loginScreen";
+    modal.classList.add("modalScreen");
+
+    const title = document.createElement("h2");
+    title.innerText = "Login";
+    modal.appendChild(title);
+
+    const usernameInput = document.createElement("input");
+    usernameInput.placeholder = "Username";
+    modal.appendChild(usernameInput);
+
+    const passwordInput = document.createElement("input");
+    passwordInput.placeholder = "Password";
+    passwordInput.type = "password";
+    modal.appendChild(passwordInput);
+
+    const submitBtn = document.createElement("button");
+    submitBtn.innerText = "Login";
+    submitBtn.addEventListener("click", () => {
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value.trim();
+        if (username && password) {
+            console.log("Logging in", username, password);
+            modal.style.display = "none";
+        } else {
+            alert("Enter username and password");
+        }
+    });
+    modal.appendChild(submitBtn);
+
+    const closeBtn = document.createElement("button");
+    closeBtn.innerText = "Close";
+    closeBtn.addEventListener("click", () => modal.style.display = "none");
+    modal.appendChild(closeBtn);
+
+    document.body.appendChild(modal);
 }
