@@ -14,12 +14,12 @@ class GameManager{
         this.#score = 0;
     }
     increaseScoreHorizontal(){
-        this.#score += 1;
+        this.#score += 10;
         updateScore(this.#score);
     }
 
     increaseScoreVertical(){
-        this.#score += 3;
+        this.#score += 25;
         updateScore(this.#score);
     }
 

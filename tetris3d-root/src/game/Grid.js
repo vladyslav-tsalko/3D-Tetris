@@ -7,7 +7,7 @@ export class Grid {
     static dimensions = {
         'fieldSize': 2,
         'height': 10,
-        'width': 4
+        'width': 5
     }
     constructor(){
         Object.freeze(Grid.dimensions);

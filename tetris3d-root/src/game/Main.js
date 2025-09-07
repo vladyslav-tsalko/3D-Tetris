@@ -9,7 +9,7 @@ import { keyListener } from "./Listeners.js";
 /** @type {WebGLRenderingContext} */
 export let gl = null;
 /** @type {View} */
-let view = null;
+export let view = null;
 
 export const { mat4, vec4, mat3, vec3 } = glMatrix;
 const toRad = glMatrix.glMatrix.toRadian;

@@ -91,12 +91,6 @@ class Scene{
                 removedCubeOrigins.push(this.tetraCubes[i].removeCubes(vector));
                 if(this.tetraCubes[i].isEmpty()){
                     this.tetraCubes.splice(i, 1);
-                    if(plane == Plane.XZ){
-                        gameManager.increaseScoreHorizontal();
-                    }
-                    else{
-                        gameManager.increaseScoreVertical();
-                    }
                 }
             }
         }
@@ -133,9 +127,11 @@ class Scene{
                     this.filled.xz[b]++;
                 }
             }
-
+            gameManager.increaseScoreHorizontal();
         }
-        
+        else{
+            gameManager.increaseScoreVertical();
+        }
     }
 
     #filledPlane(){

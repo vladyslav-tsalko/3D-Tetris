@@ -1,6 +1,8 @@
 //listens all keys
 import { gameManager } from "./GameManager.js";
 import { grid } from "./Grid.js";
+import { view } from "./Main.js";
+
 export function keyListener(){
     window.addEventListener("keydown", (event) => {
         event.preventDefault(); // теперь работает
