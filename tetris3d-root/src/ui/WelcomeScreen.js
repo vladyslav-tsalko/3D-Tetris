@@ -1,5 +1,6 @@
 import { initialize } from '../game/Main.js';
 import { gameManager } from '../game/GameManager.js';
+import { authManager } from '../network/AuthManager.js';
 
 export function setupWelcomeScreen() {
     const demoPlayeBtn = document.getElementById("demoPlayButton");
@@ -12,9 +13,7 @@ export function setupWelcomeScreen() {
     });
 
     const controlsBtn = document.getElementById("controlsButton");
-    controlsBtn.addEventListener("click", () => {
-        showControlsScreen();
-    });
+    controlsBtn.addEventListener("click", () => showControlsScreen());
 
     const registerBtn = document.getElementById("registerButton");
     const loginBtn = document.getElementById("loginButton");
@@ -24,12 +23,15 @@ export function setupWelcomeScreen() {
 }
 
 function showControlsScreen() {
+    const welcomeDiv = document.getElementById("welcome");
+    welcomeDiv.style.display = "none";
     // Если экран уже существует — просто показываем
     let existing = document.getElementById("controlsScreen");
     if (existing) {
         existing.style.display = "flex";
         return;
     }
+    
 
     // Основной контейнер
     const controlsDiv = document.createElement("div");
@@ -102,6 +104,7 @@ function showControlsScreen() {
 
     closeBtn.addEventListener("click", () => {
         controlsDiv.style.display = "none";
+        welcomeDiv.style.display = "flex";
     });
 
     controlsDiv.appendChild(closeBtn);
@@ -111,12 +114,14 @@ function showControlsScreen() {
 
 // ------------------- Register Screen -------------------
 function showRegisterModal() {
+    const welcomeDiv = document.getElementById("welcome");
+    welcomeDiv.style.display = "none";
+
     let existing = document.getElementById("registerScreen");
     if (existing) {
         existing.style.display = "flex";
         return;
     }
-
     const modal = document.createElement("div");
     modal.id = "registerScreen";
     modal.classList.add("modalScreen");
@@ -136,21 +141,33 @@ function showRegisterModal() {
 
     const submitBtn = document.createElement("button");
     submitBtn.innerText = "Register";
-    submitBtn.addEventListener("click", () => {
+    submitBtn.addEventListener("click", async () => {
         const username = usernameInput.value.trim();
         const password = passwordInput.value.trim();
-        if (username && password) {
-            console.log("Registering", username, password);
-            modal.style.display = "none";
-        } else {
-            alert("Enter username and password");
+        if(!username || !password){
+            alert('Enter username and password!');
+            return;
         }
+        authManager.register(username, password)
+        .then(res => {
+            if(res.success){
+                console.log("✅ Successfully registered:", res);
+            }else{
+                console.log(`⚠️ Warning, status ${res.status}, message: ${res.message}`);
+            }
+        })
+        .catch(err => {
+            console.error("❌ Error:", err);
+        });
     });
     modal.appendChild(submitBtn);
 
     const closeBtn = document.createElement("button");
     closeBtn.innerText = "Close";
-    closeBtn.addEventListener("click", () => modal.style.display = "none");
+    closeBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+        welcomeDiv.style.display = "flex";
+    });
     modal.appendChild(closeBtn);
 
     document.body.appendChild(modal);
@@ -158,11 +175,14 @@ function showRegisterModal() {
 
 // ------------------- Login Screen -------------------
 function showLoginModal() {
+    const welcomeDiv = document.getElementById("welcome");
+    welcomeDiv.style.display = "none";
     let existing = document.getElementById("loginScreen");
     if (existing) {
         existing.style.display = "flex";
         return;
     }
+
 
     const modal = document.createElement("div");
     modal.id = "loginScreen";
@@ -197,7 +217,10 @@ function showLoginModal() {
 
     const closeBtn = document.createElement("button");
     closeBtn.innerText = "Close";
-    closeBtn.addEventListener("click", () => modal.style.display = "none");
+    closeBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+        welcomeDiv.style.display = "flex";
+    });
     modal.appendChild(closeBtn);
 
     document.body.appendChild(modal);

@@ -1,4 +1,5 @@
 import { gameManager } from "../game/GameManager.js";
+import { removeKeyListener } from "../game/Listeners.js";
 
 export function setupGameScreen() {
     const backBtn = document.getElementById("backButton");
@@ -13,6 +14,7 @@ export function setupGameScreen() {
         document.getElementById("welcome").style.display = "flex";
 
         gameManager.abortGame();
+        removeKeyListener();
     });
 
     // Рестарт

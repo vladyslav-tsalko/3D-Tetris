@@ -3,15 +3,19 @@ import { gameManager } from "./GameManager.js";
 import { grid } from "./Grid.js";
 import { view } from "./Main.js";
 
+let visibilityChange = null;
+let keyDownHandler = null;
+let wheelHandler = null;
+
 export function keyListener(){
-    document.addEventListener("visibilitychange", () => {
+    visibilityChange = () => {
         if (document.hidden) {
             gameManager.pause();
             document.getElementById("playPauseButton").innerText = "▶";
         }
-    });
+    };
 
-    window.addEventListener("keydown", (event) => {
+    keyDownHandler = (event) =>{
         event.preventDefault(); // теперь работает
         //moving tetracibes
         if(event.key === 'd' || event.key === 'ArrowRight'){
@@ -40,7 +44,7 @@ export function keyListener(){
 
         //speeding up tetracube
         if(event.key === ' '){
-             if(!gameManager.isGamePaused){
+            if(!gameManager.isGamePaused){
                 gameManager.getCurrentTetraCube().isSpeededUp = true;
             }
         }
@@ -115,16 +119,22 @@ export function keyListener(){
         // if(cameraRotate){
         //     view.rotateCamera(rotAxis, Math.PI / 32);
         // }
-    });
-
-    window.addEventListener('wheel', (event) => {
+    };
+    
+    wheelHandler = (event) => {
         event.preventDefault();
         if (event.deltaY < 0) {
             view.zoomIn();
         } else {
             view.zoomOut();
         }
-    });
+    }
+
+    document.addEventListener("visibilitychange", visibilityChange);
+
+    window.addEventListener("keydown", keyDownHandler);
+
+    window.addEventListener('wheel', wheelHandler);
 
     // canvas.addEventListener("mousedown", (event) => {
     //     view.isCameraMoving = true;
@@ -141,6 +151,22 @@ export function keyListener(){
     // canvas.addEventListener("mouseup", () => {
     //     view.isCameraMoving = false;
     // });
+}
+
+
+export function removeKeyListener() {
+    if (visibilityChange) {
+        window.removeEventListener("visibilitychange", visibilityChange);
+        visibilityChange = null;
+    }
+    if (keyDownHandler) {
+        window.removeEventListener("keydown", keyDownHandler);
+        keyDownHandler = null;
+    }
+    if (wheelHandler) {
+        window.removeEventListener("wheel", wheelHandler);
+        wheelHandler = null;
+    }
 }
 
 function translate(vector){

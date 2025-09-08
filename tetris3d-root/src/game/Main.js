@@ -12,7 +12,6 @@ export let gl = null;
 export let view = null;
 
 export const { mat4, vec4, mat3, vec3 } = glMatrix;
-const toRad = glMatrix.glMatrix.toRadian;
 
 
 export const matrices = {

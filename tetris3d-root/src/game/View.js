@@ -1,6 +1,7 @@
 import {Grid} from './Grid.js';
 import {shaderPrograms} from './ShaderProgram.js';
 import {mat4, matrices, gl} from './Main.js';
+const toRad = glMatrix.glMatrix.toRadian;
 
 export class View{
     constructor(aspectRatio){
