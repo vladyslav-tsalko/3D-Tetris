@@ -85,14 +85,38 @@
 
 #welcome h1 {
     font-size: 3em;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 }
 
-#welcome button {
-    padding: 10px 30px;
-    font-size: 1.5em;
-    margin-bottom: 15px;
+/* Общий стиль для строк с кнопками */
+.button-row {
+    display: flex;
+    gap: 20px;           /* расстояние между кнопками */
+    margin-bottom: 20px; /* расстояние между строками */
+}
+
+/* Общий стиль для всех кнопок */
+.button-row button {
+    width: 150px;        /* одинаковая ширина для всех кнопок */
+    padding: 10px;
+    font-size: 1.2em;
     cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid;
+}
+
+/* Белые кнопки */
+.white-buttons button {
+    background-color: white;
+    color: black;
+    border-color: white;
+}
+
+/* Черные кнопки */
+.black-buttons button {
+    background-color: black;
+    color: white;
+    border-color: white;
 }
 
 /* ----------GAME HUD---------- */
@@ -148,7 +172,7 @@
     transform: translate(-50%, -50%);
     width: 400px;   /* фиксированная ширина */
     min-height: 300px; /* минимальная высота */
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -179,13 +203,36 @@
     color: white;
 }
 
-.modalScreen button {
-    margin-top: 15px;
-    padding: 10px 25px;
+.buttons {
+    display: flex;
+    flex-direction: column; /* столбик */
+    gap: 10px;              /* расстояние между кнопками */
+    align-items: center;    /* центрируем по горизонтали */
+    margin-top: 15px;       /* отступ сверху от инпутов */
+}
+
+.buttons button {
+    width: 150px;           /* одинаковая ширина с инпутами */
+    padding: 10px 25px;     /* оставляем твой padding */
     font-size: 1.2em;
     cursor: pointer;
     background: #1a1a1a;
     color: white;
     border: 1px solid white;
     border-radius: 5px;
+    margin: 0;              /* убираем margin-top из прежнего правила */
+}
+
+.modalScreen input.input-error {
+    border: 2px solid #ff4d4d;
+    background-color: #fff0f0;
+}
+
+.error-message {
+    color: #ff4d4d;
+    font-size: 0.9em;
+    margin-top: 5px;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 10px; 
 }

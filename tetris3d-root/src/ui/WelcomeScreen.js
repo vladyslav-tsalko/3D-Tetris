@@ -25,91 +25,14 @@ export function setupWelcomeScreen() {
 function showControlsScreen() {
     const welcomeDiv = document.getElementById("welcome");
     welcomeDiv.style.display = "none";
-    // Если экран уже существует — просто показываем
-    let existing = document.getElementById("controlsScreen");
-    if (existing) {
-        existing.style.display = "flex";
-        return;
-    }
-    
 
-    // Основной контейнер
-    const controlsDiv = document.createElement("div");
-    controlsDiv.id = "controlsScreen"; // CSS из styles.css автоматически применится
+    const controlsDiv = document.getElementById("controlsScreen");
+    controlsDiv.style.display = "flex";
 
-    // Заголовок
-    const title = document.createElement("h2");
-    title.innerText = "3D Tetris Controls";
-    controlsDiv.appendChild(title);
-
-    // Контейнер для таблицы (центрирование)
-    const tableWrapper = document.createElement("div");
-    tableWrapper.style.display = "flex";
-    tableWrapper.style.justifyContent = "center";
-    tableWrapper.style.width = "100%";
-
-    // Таблица
-    const table = document.createElement("table");
-
-    // Заголовки столбцов
-    const headerRow = document.createElement("tr");
-    const thKey = document.createElement("th");
-    thKey.innerText = "Key";
-
-    const thAction = document.createElement("th");
-    thAction.innerText = "Action";
-
-    headerRow.appendChild(thKey);
-    headerRow.appendChild(thAction);
-    table.appendChild(headerRow);
-
-    // Данные управления
-    const controls = [
-        ["W / S", "Move TetraCube forward/back"],
-        ["A / D", "Move TetraCube left/right"],
-        ["Arrow Keys", "Same as W/A/S/D"],
-        ["Space", "Speed up falling"],
-        //["P", "Pause / Unpause game"],
-        ["G", "Toggle grid complexity"],
-        ["X / x", "Rotate TetraCube around X axis (different directions)"],
-        ["Y / y", "Rotate TetraCube around Y axis (different directions)"],
-        ["Z / z", "Rotate TetraCube around Z axis (different directions)"],
-        ["+ / -", "Zoom in / Zoom out"],
-        ["V", "Change view (perspective/ortho)"],
-        ["Shift+V", "Reset camera view"],
-        ["Mouse Scroll", "Zoom camera in/out"]
-    ];
-
-    controls.forEach(([key, action]) => {
-        const row = document.createElement("tr");
-
-        const tdKey = document.createElement("td");
-        tdKey.innerText = key;
-
-        const tdAction = document.createElement("td");
-        tdAction.innerText = action;
-
-        row.appendChild(tdKey);
-        row.appendChild(tdAction);
-        table.appendChild(row);
-    });
-
-    tableWrapper.appendChild(table);
-    controlsDiv.appendChild(tableWrapper);
-
-    // Кнопка закрытия
-    const closeBtn = document.createElement("button");
-    closeBtn.id = "closeControlsBtn";
-    closeBtn.innerText = "Close";
-
-    closeBtn.addEventListener("click", () => {
+    document.getElementById("closeControlsBtn").addEventListener("click", () => {
         controlsDiv.style.display = "none";
         welcomeDiv.style.display = "flex";
     });
-
-    controlsDiv.appendChild(closeBtn);
-
-    document.body.appendChild(controlsDiv);
 }
 
 // ------------------- Register Screen -------------------
@@ -117,37 +40,42 @@ function showRegisterModal() {
     const welcomeDiv = document.getElementById("welcome");
     welcomeDiv.style.display = "none";
 
-    let existing = document.getElementById("registerScreen");
-    if (existing) {
-        existing.style.display = "flex";
-        return;
-    }
-    const modal = document.createElement("div");
-    modal.id = "registerScreen";
-    modal.classList.add("modalScreen");
+    const modal = document.getElementById("registerModal");
+    modal.style.display = "flex";
 
-    const title = document.createElement("h2");
-    title.innerText = "Register";
-    modal.appendChild(title);
+    const usernameInput = document.getElementById("registerUsername");
+    const passwordInput = document.getElementById("registerPassword");
+    const usernameError = document.getElementById("registerUsernameError");
+    const passwordError = document.getElementById("registerPasswordError");
+    const submitBtn = document.getElementById("submitRegister");
+    const closeBtn = document.getElementById("closeRegister");
 
-    const usernameInput = document.createElement("input");
-    usernameInput.placeholder = "Username";
-    modal.appendChild(usernameInput);
-
-    const passwordInput = document.createElement("input");
-    passwordInput.placeholder = "Password";
-    passwordInput.type = "password";
-    modal.appendChild(passwordInput);
-
-    const submitBtn = document.createElement("button");
-    submitBtn.innerText = "Register";
     submitBtn.addEventListener("click", async () => {
+        [usernameInput, passwordInput].forEach(input => input.classList.remove("input-error"));
+        [usernameError, passwordError].forEach(err => err.innerText = "");
+
         const username = usernameInput.value.trim();
         const password = passwordInput.value.trim();
-        if(!username || !password){
-            alert('Enter username and password!');
-            return;
+        let hasError = false;
+
+        if (!username) {
+            usernameInput.classList.add("input-error");
+            usernameError.innerText = "Username is required";
+            hasError = true;
         }
+
+        if (!password) {
+            passwordInput.classList.add("input-error");
+            passwordError.innerText = "Password is required";
+            hasError = true;
+        } else if (password.length < 6) {
+            passwordInput.classList.add("input-error");
+            passwordError.innerText = "Password must be at least 6 characters";
+            hasError = true;
+        }
+
+        if (hasError) return; // не отправляем запрос, если есть ошибки
+
         authManager.register(username, password)
         .then(res => {
             if(res.success){
@@ -160,68 +88,73 @@ function showRegisterModal() {
             console.error("❌ Error:", err);
         });
     });
-    modal.appendChild(submitBtn);
 
-    const closeBtn = document.createElement("button");
-    closeBtn.innerText = "Close";
     closeBtn.addEventListener("click", () => {
+        [usernameInput, passwordInput].forEach(input => input.classList.remove("input-error"));
+        [usernameError, passwordError].forEach(err => err.innerText = "");
         modal.style.display = "none";
         welcomeDiv.style.display = "flex";
     });
-    modal.appendChild(closeBtn);
-
-    document.body.appendChild(modal);
 }
 
 // ------------------- Login Screen -------------------
 function showLoginModal() {
     const welcomeDiv = document.getElementById("welcome");
     welcomeDiv.style.display = "none";
-    let existing = document.getElementById("loginScreen");
-    if (existing) {
-        existing.style.display = "flex";
-        return;
-    }
+    
+    const modal = document.getElementById("loginModal");
+    modal.style.display = "flex";
 
+    const usernameInput = document.getElementById("loginUsername");
+    const passwordInput = document.getElementById("loginPassword");
+    const usernameError = document.getElementById("loginUsernameError");
+    const passwordError = document.getElementById("loginPasswordError");
+    const submitBtn = document.getElementById("submitLogin");
+    const closeBtn = document.getElementById("closeLogin");
 
-    const modal = document.createElement("div");
-    modal.id = "loginScreen";
-    modal.classList.add("modalScreen");
+    submitBtn.addEventListener("click", async () => {
+        [usernameInput, passwordInput].forEach(input => input.classList.remove("input-error"));
+        [usernameError, passwordError].forEach(err => err.innerText = "");
 
-    const title = document.createElement("h2");
-    title.innerText = "Login";
-    modal.appendChild(title);
-
-    const usernameInput = document.createElement("input");
-    usernameInput.placeholder = "Username";
-    modal.appendChild(usernameInput);
-
-    const passwordInput = document.createElement("input");
-    passwordInput.placeholder = "Password";
-    passwordInput.type = "password";
-    modal.appendChild(passwordInput);
-
-    const submitBtn = document.createElement("button");
-    submitBtn.innerText = "Login";
-    submitBtn.addEventListener("click", () => {
         const username = usernameInput.value.trim();
         const password = passwordInput.value.trim();
-        if (username && password) {
-            console.log("Logging in", username, password);
-            modal.style.display = "none";
-        } else {
-            alert("Enter username and password");
-        }
-    });
-    modal.appendChild(submitBtn);
+        let hasError = false;
 
-    const closeBtn = document.createElement("button");
-    closeBtn.innerText = "Close";
+        if (!username) {
+            usernameInput.classList.add("input-error");
+            usernameError.innerText = "Username is required";
+            hasError = true;
+        }
+
+        if (!password) {
+            passwordInput.classList.add("input-error");
+            passwordError.innerText = "Password is required";
+            hasError = true;
+        } else if (password.length < 6) {
+            passwordInput.classList.add("input-error");
+            passwordError.innerText = "Password must be at least 6 characters";
+            hasError = true;
+        }
+
+        if (hasError) return; // не отправляем запрос, если есть ошибки
+
+        authManager.register(username, password)
+        .then(res => {
+            if(res.success){
+                console.log("✅ Successfully registered:", res);
+            }else{
+                console.log(`⚠️ Warning, status ${res.status}, message: ${res.message}`);
+            }
+        })
+        .catch(err => {
+            console.error("❌ Error:", err);
+        });
+    });
+
     closeBtn.addEventListener("click", () => {
+        [usernameInput, passwordInput].forEach(input => input.classList.remove("input-error"));
+        [usernameError, passwordError].forEach(err => err.innerText = "");
         modal.style.display = "none";
         welcomeDiv.style.display = "flex";
     });
-    modal.appendChild(closeBtn);
-
-    document.body.appendChild(modal);
 }

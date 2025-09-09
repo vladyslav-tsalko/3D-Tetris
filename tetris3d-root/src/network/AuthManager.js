@@ -17,31 +17,15 @@ class AuthManager {
             const data = await res.json().catch(() => null); // безопасно парсим JSON, если есть
 
             if (res.ok) {
-                //console.log("✅ Registered:", data);
                 return { success: true, data };
             } 
-            // else if (res.status === 409) {
-            //     //console.log("⚠️ Username already exists:", data?.error || "Conflict");
-            //     return { success: false, status: 409, message: data?.error };
-            // } 
             else {
-                //console.log("❌ Registration failed:", data?.error || res.statusText);
                 return { success: false, status: res.status, message: data?.error || res.statusText };
             }
 
         } catch(err){
             return { success: false, status: 0, message: "Network error" };
         }
-        
-
-        // if (res.status === 409) {
-        //     throw new Error("This username is already taken");
-        // }
-
-        // if (!res.ok) {
-        //     throw new Error(`Registration failed: ${res.status}`);
-        // }
-        return res.json();
     }
 
     async login(username, password) {

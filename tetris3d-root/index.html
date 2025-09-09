@@ -7,19 +7,6 @@
 
     <link rel="stylesheet" href="styles.css">
     <script type="text/javascript" src="src/game/gl-matrix-min.js"></script>   
-    <!-- <script type="text/javascript" src="src/game/Main.js"></script>
-    <script type="text/javascript" src="src/game/ShaderProgram.js"></script>
-    <script type="text/javascript" src="src/game/Listeners.js"></script>
-    <script type="text/javascript" src="src/game/FigureManager.js"></script>
-    <script type="text/javascript" src="src/game/Grid.js"></script>
-    <script type="text/javascript" src="src/game/TetraCube.js"></script>
-    <script type="text/javascript" src="src/game/BufferCube.js"></script>
-    <script type="text/javascript" src="src/game/Scene.js"></script>
-    <script type="text/javascript" src="src/game/View.js"></script>
-    <script type="text/javascript" src="src/game/GameManager.js"></script> -->
-
-    <!-- <script type="text/javascript" src="src/ui/Background.js"></script>
-    <script type="text/javascript" src="src/ui/WelcomeScreen.js"></script> -->
 
     <script id="v-shader-nolight" type="x-shader/x-vertex">
         precision mediump float;
@@ -98,32 +85,87 @@
 
     <div id="welcome">
         <h1>3D Tetris in Space</h1>
-        <button id="demoPlayButton">Demo Player</button>
-        <button id="registerButton">Register</button>
-        <button id="loginButton">Login</button>
-        <button id="controlsButton">Controls</button>
+
+        <div class="button-row white-buttons">
+            <button id="loginButton">Login</button>
+            <button id="registerButton">Register</button>
+        </div>
+
+        <div class="button-row black-buttons">
+            <button id="demoPlayButton">Demo Play</button>
+            <button id="controlsButton">Controls</button>
+        </div>
     </div>
 
     <!-- Register Modal -->
-    <div id="registerModal" class="modal">
+    <div id="registerModal" class="modalScreen">
         <div class="modal-content">
             <h2>Register</h2>
-            <input type="text" id="registerUsername" placeholder="Username">
-            <input type="password" id="registerPassword" placeholder="Password">
-            <button id="submitRegister">Register</button>
-            <button id="closeRegister">Close</button>
+            <div class="input-group">
+                <input type="text" id="registerUsername" placeholder="Username">
+                <div class="error-message" id="registerUsernameError"></div>
+            </div>
+            <div class="input-group">
+                <input type="password" id="registerPassword" placeholder="Password">
+                <div class="error-message" id="registerPasswordError"></div>
+            </div>
+             <div class="buttons">
+                <button id="submitRegister">Register</button>
+                <button id="closeRegister">Close</button>
+            </div>
         </div>
     </div>
 
     <!-- Login Modal -->
-    <div id="loginModal" class="modal">
+    <div id="loginModal" class="modalScreen">
         <div class="modal-content">
             <h2>Login</h2>
-            <input type="text" id="loginUsername" placeholder="Username">
-            <input type="password" id="loginPassword" placeholder="Password">
-            <button id="submitLogin">Login</button>
-            <button id="closeLogin">Close</button>
+            <div class="input-group">
+                <input type="text" id="loginUsername" placeholder="Username">
+                <div class="error-message" id="loginUsernameError"></div>
+            </div>
+            <div class="input-group">
+                <input type="password" id="loginPassword" placeholder="Password">
+                <div class="error-message" id="loginPasswordError"></div>
+            </div>
+            <div class="buttons">
+                <button id="submitLogin">Login</button>
+                <button id="closeLogin">Close</button>
+            </div>
         </div>
+    </div>
+
+
+    <div id="controlsScreen" style="display: none;">
+        <h2>3D Tetris Controls</h2>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>W / S</td><td>Move TetraCube forward/back</td></tr>
+                    <tr><td>A / D</td><td>Move TetraCube left/right</td></tr>
+                    <tr><td>Arrow Keys</td><td>Same as W/A/S/D</td></tr>
+                    <tr><td>Space</td><td>Speed up falling</td></tr>
+                    <tr><td>P</td><td>Pause / Unpause game</td></tr>
+                    <tr><td>G</td><td>Toggle grid complexity</td></tr>
+                    <tr><td>X / x</td><td>Rotate TetraCube around X axis (different directions)</td></tr>
+                    <tr><td>Y / y</td><td>Rotate TetraCube around Y axis (different directions)</td></tr>
+                    <tr><td>Z / z</td><td>Rotate TetraCube around Z axis (different directions)</td></tr>
+                    <tr><td>+ / -</td><td>Zoom in / Zoom out</td></tr>
+                    <tr><td>V</td><td>Change view (perspective/ortho)</td></tr>
+                    <tr><td>Shift+V</td><td>Reset camera view</td></tr>
+                    <tr><td>Mouse Scroll</td><td>Zoom camera in/out</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <button id="closeControlsBtn">Close</button>
     </div>
 
 
