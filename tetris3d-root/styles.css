@@ -67,7 +67,7 @@
     display: none;
 }
 
-#welcome {
+#welcomeGuest {
     position: absolute;
     top: 0;
     left: 0;
@@ -83,7 +83,7 @@
     background: transparent;
 }
 
-#welcome h1 {
+#welcomeGuest h1 {
     font-size: 3em;
     margin-bottom: 40px;
 }

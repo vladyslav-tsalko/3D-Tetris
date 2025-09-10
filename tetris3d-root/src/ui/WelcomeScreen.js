@@ -6,7 +6,7 @@ import { InputValidator } from './InputValidator.js';
 export function setupWelcomeScreen() {
     const demoPlayeBtn = document.getElementById("demoPlayButton");
     demoPlayeBtn.addEventListener("click", () => {
-        document.getElementById("welcome").style.display = "none";
+        document.getElementById("welcomeGuest").style.display = "none";
         document.getElementById("canvas").style.display = "block";   // показываем WebGL canvas
         document.getElementById("gameHUD").style.display = "flex";  // показываем HUD
         initialize();
@@ -24,7 +24,7 @@ export function setupWelcomeScreen() {
 }
 
 function showControlsScreen() {
-    const welcomeDiv = document.getElementById("welcome");
+    const welcomeDiv = document.getElementById("welcomeGuest");
     welcomeDiv.style.display = "none";
 
     const controlsDiv = document.getElementById("controlsScreen");
@@ -38,7 +38,7 @@ function showControlsScreen() {
 
 // ------------------- Register Screen -------------------
 function showRegisterModal() {
-    const welcomeDiv = document.getElementById("welcome");
+    const welcomeDiv = document.getElementById("welcomeGuest");
     welcomeDiv.style.display = "none";
 
     const modal = document.getElementById("registerModal");
@@ -79,7 +79,7 @@ function showRegisterModal() {
 
 // ------------------- Login Screen -------------------
 function showLoginModal() {
-    const welcomeDiv = document.getElementById("welcome");
+    const welcomeDiv = document.getElementById("welcomeGuest");
     welcomeDiv.style.display = "none";
     
     const modal = document.getElementById("loginModal");
