@@ -50,7 +50,7 @@
     border-radius: 5px;
 }
 
-/* ----------CANVASES AND WELCOME---------- */
+/* ----------CANVASES---------- */
 
 #background {
     position: absolute;
@@ -66,6 +66,8 @@
     z-index: 1;
     display: none;
 }
+
+/* ----------WELCOME GUEST---------- */
 
 #welcomeGuest {
     position: absolute;
@@ -118,6 +120,72 @@
     color: white;
     border-color: white;
 }
+
+/* ----------WELCOME LOGGED---------- */
+
+/* Контейнер Logged */
+#welcomeLogged {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    color: white;
+    font-family: sans-serif;
+    background: transparent;
+}
+
+#welcomeLogged h1 {
+    font-size: 3em;
+    margin-bottom: 40px;
+}
+
+/* Отображение никнейма сверху */
+#userInfoLogged {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+/* Общий стиль для строк с кнопками (как в welcomeGuest) */
+#welcomeLogged .button-column {
+    display: flex;
+    gap: 20px;           /* расстояние между кнопками */
+    margin-bottom: 20px; /* расстояние между строками */
+    flex-direction: column; /* <-- добавляем это */
+}
+
+/* Общий стиль для кнопок */
+#welcomeLogged .button-column button {
+    width: 150px;        /* одинаковая ширина */
+    padding: 10px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid;
+}
+
+/* Черные кнопки */
+#welcomeLogged .black-buttons button {
+    background-color: black;
+    color: white;
+    border-color: white;
+}
+
+/* Белая кнопка Logout */
+#welcomeLogged #logoutButton {
+    background-color: white;
+    color: black;
+    border-color: white;
+}
+
 
 /* ----------GAME HUD---------- */
 
@@ -187,6 +255,13 @@
     border-radius: 10px;
 }
 
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* центрируем всё внутри */
+    width: 100%;
+}
+
 .modalScreen h2 {
     margin-bottom: 20px;
     text-align: center;
@@ -201,6 +276,7 @@
     border: 1px solid white;
     background: #1a1a1a;
     color: white;
+    box-sizing: border-box;         /* учитывает border в width */
 }
 
 .buttons {
@@ -225,16 +301,27 @@
 
 .modalScreen input.input-error {
     border: 2px solid #ff4d4d;
-    background-color: #fff0f0;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* центрируем инпут */
+    width: 200px;        /* фиксированная ширина */
 }
 
 .error-message {
+    display: none;           /* по умолчанию скрыт */
     color: #ff4d4d;
     font-size: 0.9em;
     margin-top: 5px;
     text-align: center;
-    width: 100%;
+    max-width: 100%;     /* не шире родителя */
+    word-wrap: break-word; /* перенос слов, если длинное */
     margin-bottom: 10px; 
+}
+.error-message.active {
+  display: block;          /* показываем когда есть ошибка */
 }
 
 /*----------USER INFO----------*/

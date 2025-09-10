@@ -1,9 +1,48 @@
 import { initialize } from '../game/Main.js';
 import { gameManager } from '../game/GameManager.js';
 import { authManager } from '../network/AuthManager.js';
-import { InputValidator } from './InputValidator.js';
+import { RegisterInputHandler } from './DataInputHandlers/RegisterInputHandler.js';
+import { LoginInputHandler } from './DataInputHandlers/LoginInputHandler.js';
+import { jwtParser } from '../network/JwtParser.js';
 
 export function setupWelcomeScreen() {
+    const welcomeGuestDiv = document.getElementById("welcomeGuest");
+    const welcomeLoggedDiv = document.getElementById("welcomeLogged");
+    const userInfoLogged = document.getElementById("userInfoLogged");
+
+    const token = localStorage.getItem("jwt");
+    const username = jwtParser.parseNicknameFromJwt(token);
+    if(username){
+        welcomeGuestDiv.style.display = "none";
+        welcomeLoggedDiv.style.display = "flex";
+        userInfoLogged.textContent = username;
+        showWelcomeLoggedScreen();
+    }else{
+        welcomeLoggedDiv.style.display = "none";
+        welcomeGuestDiv.style.display = "flex";
+        userInfoLogged.textContent = 'Guest';
+        showWelcomeGuestScreen();
+    }
+}
+
+function showWelcomeLoggedScreen(){
+    document.getElementById("logoutButton").onclick = () => {
+        localStorage.removeItem("jwt");
+        setupWelcomeScreen();
+    };
+    // Кнопки авторизованного
+    document.getElementById("playButton").onclick = () => {
+        document.getElementById("welcomeLogged").style.display = "none";
+        document.getElementById("canvas").style.display = "block";   // показываем WebGL canvas
+        document.getElementById("gameHUD").style.display = "flex";  // показываем HUD
+        initialize();
+        gameManager.beginGame();
+    };
+
+    document.getElementById("controlsButtonLogged").onclick = () => showControlsScreen();
+}
+
+function showWelcomeGuestScreen(){
     const demoPlayeBtn = document.getElementById("demoPlayButton");
     demoPlayeBtn.addEventListener("click", () => {
         document.getElementById("welcomeGuest").style.display = "none";
@@ -44,23 +83,23 @@ function showRegisterModal() {
     const modal = document.getElementById("registerModal");
     modal.style.display = "flex";
 
-    const usernameInput = document.getElementById("registerUsername");
-    const passwordInput = document.getElementById("registerPassword");
-    const usernameError = document.getElementById("registerUsernameError");
-    const passwordError = document.getElementById("registerPasswordError");
     const submitBtn = document.getElementById("submitRegister");
     const closeBtn = document.getElementById("closeRegister");
     
-    const inputValidator = new InputValidator(usernameInput, passwordInput, usernameError, passwordError);
+    const inputValidator = new RegisterInputHandler();
 
     submitBtn.addEventListener("click", async () => {
         inputValidator.removeInputErrors();
         if(!inputValidator.isValid()) return;
 
-        authManager.register(username, password)
+        authManager.register(inputValidator.getUsername(), inputValidator.getPassword())
         .then(res => {
             if(res.success){
                 console.log("✅ Successfully registered:", res);
+                localStorage.setItem("jwt", res.data?.token);
+                inputValidator.removeInputErrors();
+                modal.style.display = "none";
+                setupWelcomeScreen();
             }else{
                 console.log(`⚠️ Warning, status ${res.status}, message: ${res.message}`);
             }
@@ -85,23 +124,23 @@ function showLoginModal() {
     const modal = document.getElementById("loginModal");
     modal.style.display = "flex";
 
-    const usernameInput = document.getElementById("loginUsername");
-    const passwordInput = document.getElementById("loginPassword");
-    const usernameError = document.getElementById("loginUsernameError");
-    const passwordError = document.getElementById("loginPasswordError");
     const submitBtn = document.getElementById("submitLogin");
     const closeBtn = document.getElementById("closeLogin");
 
-    const inputValidator = new InputValidator(usernameInput, passwordInput, usernameError, passwordError);
+    const inputValidator = new LoginInputHandler();
 
     submitBtn.addEventListener("click", async () => {
         inputValidator.removeInputErrors();
         if(!inputValidator.isValid()) return;
 
-        authManager.login(username, password)
+        authManager.login(inputValidator.getUsername(), inputValidator.getPassword())
         .then(res => {
             if(res.success){
-                console.log("✅ Successfully registered:", res);
+                console.log("✅ Successfully logged in:", res);
+                localStorage.setItem("jwt", res.data?.token);
+                inputValidator.removeInputErrors();
+                modal.style.display = "none";
+                setupWelcomeScreen();
             }else{
                 console.log(`⚠️ Warning, status ${res.status}, message: ${res.message}`);
             }

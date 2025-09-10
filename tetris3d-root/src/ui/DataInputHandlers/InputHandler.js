@@ -9,14 +9,20 @@ const PasswordException = Object.freeze({
     Short: 2
 });
 
-export class InputValidator{
+export class InputHandler{
     #usernameInput = null;
     #passwordInput = null;
     #usernameError = null;
     #passwordError = null;
     #init = false;
 
-    constructor(usernameInput, passwordInput, usernameError, passwordError){
+    constructor() {
+        if (new.target === InputHandler) {
+            throw new Error("InputHandler variable can't be directly created");
+        }
+    }
+
+    _initializeFields(usernameInput, passwordInput, usernameError, passwordError) {
         this.#usernameInput = usernameInput;
         this.#passwordInput = passwordInput;
         this.#usernameError = usernameError;
@@ -40,7 +46,18 @@ export class InputValidator{
         if(!this.#init) return;
         
         [this.#usernameInput, this.#passwordInput].forEach(input => input.classList.remove("input-error"));
-        [this.#usernameError, this.#passwordError].forEach(err => err.innerText = "");
+        [this.#usernameError, this.#passwordError].forEach(err => {
+            err.innerText = "";
+            err.classList.remove("active");
+        });
+    }
+
+    getUsername(){
+        return this.#usernameInput.value.trim();
+    }
+
+    getPassword(){
+        return this.#passwordInput.value.trim();
     }
 
     #getUsernameException(){
@@ -63,6 +80,7 @@ export class InputValidator{
             case UsernameException.Empty: {
                 this.#usernameInput.classList.add("input-error");
                 this.#usernameError.innerText = "Username is required";
+                this.#usernameError.classList.add("active");
                 return;
             }
         }
@@ -72,14 +90,14 @@ export class InputValidator{
         switch(exception){
             case PasswordException.None: return;
             case PasswordException.Empty: {
-                this.#passwordInput.classList.add("input-error");
                 this.#passwordError.innerText = "Password is required";
-                return;
             }
             case PasswordException.Short:{
-                this.#passwordInput.classList.add("input-error");
                 this.#passwordError.innerText = "Password must be at least 6 characters";
-                return;
+            }
+            default:{
+                this.#passwordInput.classList.add("input-error");
+                this.#passwordError.classList.add("active");
             }
         }
     }
