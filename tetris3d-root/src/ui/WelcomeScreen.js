@@ -1,6 +1,7 @@
 import { initialize } from '../game/Main.js';
 import { gameManager } from '../game/GameManager.js';
 import { authManager } from '../network/AuthManager.js';
+import { InputValidator } from './InputValidator.js';
 
 export function setupWelcomeScreen() {
     const demoPlayeBtn = document.getElementById("demoPlayButton");
@@ -49,32 +50,12 @@ function showRegisterModal() {
     const passwordError = document.getElementById("registerPasswordError");
     const submitBtn = document.getElementById("submitRegister");
     const closeBtn = document.getElementById("closeRegister");
+    
+    const inputValidator = new InputValidator(usernameInput, passwordInput, usernameError, passwordError);
 
     submitBtn.addEventListener("click", async () => {
-        [usernameInput, passwordInput].forEach(input => input.classList.remove("input-error"));
-        [usernameError, passwordError].forEach(err => err.innerText = "");
-
-        const username = usernameInput.value.trim();
-        const password = passwordInput.value.trim();
-        let hasError = false;
-
-        if (!username) {
-            usernameInput.classList.add("input-error");
-            usernameError.innerText = "Username is required";
-            hasError = true;
-        }
-
-        if (!password) {
-            passwordInput.classList.add("input-error");
-            passwordError.innerText = "Password is required";
-            hasError = true;
-        } else if (password.length < 6) {
-            passwordInput.classList.add("input-error");
-            passwordError.innerText = "Password must be at least 6 characters";
-            hasError = true;
-        }
-
-        if (hasError) return; // не отправляем запрос, если есть ошибки
+        inputValidator.removeInputErrors();
+        if(!inputValidator.isValid()) return;
 
         authManager.register(username, password)
         .then(res => {
@@ -90,8 +71,7 @@ function showRegisterModal() {
     });
 
     closeBtn.addEventListener("click", () => {
-        [usernameInput, passwordInput].forEach(input => input.classList.remove("input-error"));
-        [usernameError, passwordError].forEach(err => err.innerText = "");
+        inputValidator.removeInputErrors();
         modal.style.display = "none";
         welcomeDiv.style.display = "flex";
     });
@@ -112,33 +92,13 @@ function showLoginModal() {
     const submitBtn = document.getElementById("submitLogin");
     const closeBtn = document.getElementById("closeLogin");
 
+    const inputValidator = new InputValidator(usernameInput, passwordInput, usernameError, passwordError);
+
     submitBtn.addEventListener("click", async () => {
-        [usernameInput, passwordInput].forEach(input => input.classList.remove("input-error"));
-        [usernameError, passwordError].forEach(err => err.innerText = "");
+        inputValidator.removeInputErrors();
+        if(!inputValidator.isValid()) return;
 
-        const username = usernameInput.value.trim();
-        const password = passwordInput.value.trim();
-        let hasError = false;
-
-        if (!username) {
-            usernameInput.classList.add("input-error");
-            usernameError.innerText = "Username is required";
-            hasError = true;
-        }
-
-        if (!password) {
-            passwordInput.classList.add("input-error");
-            passwordError.innerText = "Password is required";
-            hasError = true;
-        } else if (password.length < 6) {
-            passwordInput.classList.add("input-error");
-            passwordError.innerText = "Password must be at least 6 characters";
-            hasError = true;
-        }
-
-        if (hasError) return; // не отправляем запрос, если есть ошибки
-
-        authManager.register(username, password)
+        authManager.login(username, password)
         .then(res => {
             if(res.success){
                 console.log("✅ Successfully registered:", res);
@@ -152,8 +112,7 @@ function showLoginModal() {
     });
 
     closeBtn.addEventListener("click", () => {
-        [usernameInput, passwordInput].forEach(input => input.classList.remove("input-error"));
-        [usernameError, passwordError].forEach(err => err.innerText = "");
+        inputValidator.removeInputErrors();
         modal.style.display = "none";
         welcomeDiv.style.display = "flex";
     });

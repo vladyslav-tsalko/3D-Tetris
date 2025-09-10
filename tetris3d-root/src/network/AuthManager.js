@@ -29,16 +29,27 @@ class AuthManager {
     }
 
     async login(username, password) {
-        const res = await fetch(`${this.apiUrl}/auth/login`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password })
-        });
-        if (!res.ok) throw new Error("Login failed");
-        const data = await res.json();
-        this.token = data.token;
-        localStorage.setItem("token", this.token);
-        return data;
+         try{
+            const res = await fetch(`${this.apiUrl}/players/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            });
+            const data = await res.json().catch(() => null); // безопасно парсим JSON, если есть
+
+            if (res.ok) {
+                return { success: true, data };
+            } 
+            else {
+                return { success: false, status: res.status, message: data?.error || res.statusText };
+            }
+
+        } catch(err){
+            return { success: false, status: 0, message: "Network error" };
+        }
     }
 
     logout() {
