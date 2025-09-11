@@ -55,9 +55,9 @@ export const initialize = async () => {
         
         figureManager.createFallingShape();
 
-        keyListener(); //listener for keyboard events to the window
         isInit = true;
     }
+    keyListener(); //listener for keyboard events to the window
     
     then = performance.now(); // сразу перед первым вызовом render
     requestAnimationFrame(render); // start render loop

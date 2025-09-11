@@ -1,7 +1,6 @@
-class AuthManager {
+class ServerManager {
     constructor() {
         this.apiUrl = "http://localhost:8080/api"; // твой Spring backend
-        this.token = localStorage.getItem("token") || null;
     }
 
     async register(username, password) {
@@ -29,7 +28,7 @@ class AuthManager {
     }
 
     async login(username, password) {
-         try{
+        try{
             const res = await fetch(`${this.apiUrl}/players/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -52,23 +51,42 @@ class AuthManager {
         }
     }
 
+    async updateMaxScore(newScore){
+        try{
+            const token = localStorage.getItem('jwt'); // JWT токен
+            if (!token) {
+                return;
+            }
+
+            const res = await fetch(`${this.apiUrl}/stats/update`, {
+                method: "PUT",
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    newMaxScore: newScore,
+                })
+            });
+
+            if (res.ok) {
+                console.info('Success!');
+                return { success: true };
+            } 
+            else {
+                const data = await res.json().catch(() => null); // безопасно парсим JSON, если есть
+                console.info(data?.error || res.statusText);
+                return { success: false, status: res.status, message: data?.error || res.statusText };
+            }
+
+        } catch(err){
+            return { success: false, status: 0, message: "Network error" };
+        }
+    }
+    
     logout() {
-        this.token = null;
-        localStorage.removeItem("token");
-    }
-
-    isAuthenticated() {
-        return this.token !== null;
-    }
-
-    async getCurrentUser() {
-        if (!this.isAuthenticated()) return null;
-        const res = await fetch(`${this.apiUrl}/auth/me`, {
-            headers: { "Authorization": `Bearer ${this.token}` }
-        });
-        if (!res.ok) throw new Error("Failed to fetch user");
-        return res.json();
+        localStorage.removeItem("jwt");
     }
 }
 
-export const authManager = new AuthManager();
+export const serverManager = new ServerManager();

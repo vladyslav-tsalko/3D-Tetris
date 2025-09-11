@@ -1,6 +1,6 @@
 import { initialize } from '../game/Main.js';
 import { gameManager } from '../game/GameManager.js';
-import { authManager } from '../network/AuthManager.js';
+import { serverManager } from '../network/ServerManager.js';
 import { RegisterInputHandler } from './DataInputHandlers/RegisterInputHandler.js';
 import { LoginInputHandler } from './DataInputHandlers/LoginInputHandler.js';
 import { jwtParser } from '../network/JwtParser.js';
@@ -65,7 +65,7 @@ class WelcomeScreenHandler{
         document.getElementById("loginButton").onclick = () => this.#showLoginModal();
 
         document.getElementById("logoutButton").onclick = () => {
-            localStorage.removeItem("jwt");
+            serverManager.logout();
             this.setupWelcomeScreen();
         };
     }
@@ -79,8 +79,6 @@ class WelcomeScreenHandler{
             this.#currentWelcomeDiv.style.display = "flex";
         };
     }
-
-    
 
     #setupPlayButtons(){
         const play = () => {
@@ -105,7 +103,7 @@ class WelcomeScreenHandler{
             this.#registerInputHandler.removeInputErrors();
             if(!this.#registerInputHandler.isValid()) return;
 
-            authManager.register(this.#registerInputHandler.getUsername(), this.#registerInputHandler.getPassword())
+            serverManager.register(this.#registerInputHandler.getUsername(), this.#registerInputHandler.getPassword())
             .then(res => {
                 if(res.success){
                     console.log("✅ Successfully registered:", res);
@@ -134,14 +132,14 @@ class WelcomeScreenHandler{
             this.#loginInputHandler.removeInputErrors();
             if(!this.#loginInputHandler.isValid()) return;
 
-            authManager.login(this.#loginInputHandler.getUsername(), this.#loginInputHandler.getPassword())
+            serverManager.login(this.#loginInputHandler.getUsername(), this.#loginInputHandler.getPassword())
             .then(res => {
                 if(res.success){
                     console.log("✅ Successfully logged in:", res);
                     localStorage.setItem("jwt", res.data?.token);
                     this.#loginInputHandler.removeInputErrors();
                     this.#loginModal.style.display = "none";
-                    setupWelcomeScreen();
+                    this.setupWelcomeScreen();
                 }else{
                     console.log(`⚠️ Warning, status ${res.status}, message: ${res.message}`);
                 }
@@ -168,6 +166,8 @@ class WelcomeScreenHandler{
     #showWelcomeGuestScreen(){
         this.#toggleWelcomeGuest(true);
         this.#toggleWelcomeLogged(false);
+
+        this.#userInfo.textContent = this.#username;
     }
 
     #showControlsScreen(){

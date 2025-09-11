@@ -1,6 +1,7 @@
 import { scene } from "./Scene.js";
 import { figureManager } from "./FigureManager.js";
 import { updateScore } from "../ui/GameScreen.js";
+import { serverManager } from "../network/ServerManager.js";
 
 class GameManager{
     #isGameRunning = true;
@@ -52,6 +53,7 @@ class GameManager{
     }
 
     end(){
+        serverManager.updateMaxScore(this.#score);
         this.#isGameEnded = true;
         this.#score = 0;
         updateScore(this.#score);
@@ -88,6 +90,7 @@ class GameManager{
 
     abortGame(){
         this.#isGameRunning = false;
+        //this.end();
     }
 
     beginGame(){
