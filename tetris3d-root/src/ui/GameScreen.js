@@ -1,5 +1,6 @@
 import { gameManager } from "../game/GameManager.js";
 import { removeKeyListener } from "../game/Listeners.js";
+import { welcomeScreenHandler } from "./WelcomeScreen.js";
 
 export function setupGameScreen() {
     const backBtn = document.getElementById("backButton");
@@ -11,7 +12,7 @@ export function setupGameScreen() {
         document.getElementById("playPauseButton").innerText = "⏸";
         document.getElementById("canvas").style.display = "none";
         document.getElementById("gameHUD").style.display = "none";
-        document.getElementById("welcome").style.display = "flex";
+        welcomeScreenHandler.showCurrentWelcomeScreen();
 
         gameManager.abortGame();
         removeKeyListener();
