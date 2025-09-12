@@ -5,7 +5,7 @@ class ServerManager {
 
     async register(username, password) {
         try{
-            const res = await fetch(`${this.apiUrl}/players/register`, {
+            const res = await fetch(`${this.apiUrl}/auth/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -29,7 +29,7 @@ class ServerManager {
 
     async login(username, password) {
         try{
-            const res = await fetch(`${this.apiUrl}/players/login`, {
+            const res = await fetch(`${this.apiUrl}/auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
