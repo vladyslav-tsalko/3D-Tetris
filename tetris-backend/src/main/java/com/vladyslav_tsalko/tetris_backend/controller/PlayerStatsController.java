@@ -26,27 +26,29 @@ public class PlayerStatsController {
         this.jwtService = jwtService;
     }
 
-    @GetMapping
-    public List<PlayerStatsDTO> getAllStats() {
-        return playerStatsRepository.findAll().stream()
+    @GetMapping("/me")
+    public ResponseEntity<?> getMyStats(Authentication authentication) {
+        String username = authentication.getName(); // username, который был в токене
+
+        Optional<PlayerStats> playerStatsOpt = playerStatsRepository.findByPlayerDataUsername(username);
+
+        if (playerStatsOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "Stats not found"));
+        }
+        PlayerStats stats = playerStatsOpt.get();
+        return ResponseEntity.ok(Map.of("score", stats.getMaxScore()));
+    }
+
+    @GetMapping("/top")
+    public List<PlayerStatsDTO> getTopPlayers() {
+        return playerStatsRepository.findTop10ByOrderByMaxScoreDesc()
+                .stream()
                 .map(stats -> new PlayerStatsDTO(
                         stats.getPlayerData().getUsername(),
                         stats.getMaxScore()
                 ))
                 .toList();
-    }
-
-    // Получение статистики конкретного игрока
-    @GetMapping("/{username}")
-    public ResponseEntity<?> getStatsByPlayer(@PathVariable String username) {
-        Optional<PlayerStats> playerStatsOpt = playerStatsRepository.findByPlayerDataUsername(username);
-
-        if(playerStatsOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("error", "Stats not found"));
-        }
-
-        return ResponseEntity.ok(playerStatsOpt.get());
     }
 
     // Обновление максимального счета игрока
