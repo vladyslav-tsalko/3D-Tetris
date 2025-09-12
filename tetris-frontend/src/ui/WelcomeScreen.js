@@ -161,6 +161,58 @@ class WelcomeScreenHandler{
         this.#toggleWelcomeLogged(true);
 
         this.#userInfo.textContent = this.#username;
+
+        serverManager.loadTopPlayers()
+        .then(res => {
+            if(res.success){
+                console.log("✅ Successfully received record table");
+                this.#showRecordTable(res.data);
+            }else{
+                console.log(`⚠️ Warning, status ${res.status}, message: ${res.message}`);
+            }
+        })
+        .catch(err => {
+            console.error("❌ Error:", err);
+        });
+
+        let score = 0;
+        serverManager.getMyScore()
+        .then(res => {
+            if(res.success){
+                score = res.data?.score;
+                console.log("✅ Successfully received score: ", score);
+                this.#userInfo.textContent += `\nMax Score: ${score}`;
+            }else{
+                console.log(`⚠️ Warning, status ${res.status}, message: ${res.message}`);
+            }
+        })
+        .catch(err => {
+            console.error("❌ Error:", err);
+        });
+
+
+    }
+
+    #showRecordTable(players) {
+        const tbody = document.querySelector('#topPlayersTable tbody');
+        tbody.innerHTML = ''; // очищаем старые строки
+
+        // Если таблицу скрывали через display:none, лучше показывать сам tbody или весь контейнер
+        document.getElementById("topPlayersTable").style.display = "table";
+
+        // проходим по игрокам и создаем строки
+        players.forEach((player, index) => {
+            const tr = document.createElement('tr');
+
+            // rank, nickname, maxScore
+            tr.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${player.nickname}</td>
+                <td>${player.maxScore}</td>
+            `;
+
+            tbody.appendChild(tr);
+        });
     }
 
     #showWelcomeGuestScreen(){
@@ -168,6 +220,7 @@ class WelcomeScreenHandler{
         this.#toggleWelcomeLogged(false);
 
         this.#userInfo.textContent = this.#username;
+
     }
 
     #showControlsScreen(){

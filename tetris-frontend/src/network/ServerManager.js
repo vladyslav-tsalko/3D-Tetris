@@ -54,9 +54,7 @@ class ServerManager {
     async updateMaxScore(newScore){
         try{
             const token = localStorage.getItem('jwt'); // JWT токен
-            if (!token) {
-                return;
-            }
+            if (!token) return;
 
             const res = await fetch(`${this.apiUrl}/stats/update`, {
                 method: "PUT",
@@ -81,6 +79,58 @@ class ServerManager {
 
         } catch(err){
             return { success: false, status: 0, message: "Network error" };
+        }
+    }
+
+    async loadTopPlayers() {
+        const token = localStorage.getItem('jwt'); // токен для авторизации
+        if (!token) return;
+
+        try {
+            const res = await fetch(`${this.apiUrl}/stats/top`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if(res.ok){
+                const data = await res.json().catch(() => null); // безопасно парсим JSON, если есть
+                return { success: true, data: data };
+
+            }else{
+                console.info(data?.error || res.statusText);
+                return { success: false, status: res.status, message: data?.error || res.statusText };
+            }
+
+        } catch (err) {
+            console.error('Top-10 player error:', err);
+        }
+    }
+
+    async getMyScore(){
+        const token = localStorage.getItem('jwt'); // токен для авторизации
+        if (!token) return;
+
+        try {
+            const res = await fetch(`${this.apiUrl}/stats/me`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if(res.ok){
+                const data = await res.json().catch(() => null); // безопасно парсим JSON, если есть
+                return { success: true, data: data };
+
+            }else{
+                console.info(data?.error || res.statusText);
+                return { success: false, status: res.status, message: data?.error || res.statusText };
+            }
+
+        } catch (err) {
+            console.error('My rating error:', err);
         }
     }
     

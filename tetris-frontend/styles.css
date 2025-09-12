@@ -333,5 +333,52 @@
     color: white;
     font-size: 1.2em;
     font-family: sans-serif;
+    white-space: pre-line;
 }
 
+/*----------TOP-10 TABLE----------*/
+
+#topPlayersContainer {
+    position: absolute;   /* делаем контейнер позиционируемым */
+    top: 0px;            /* отступ сверху */
+    right: 20px;          /* отступ справа */
+    width: 300px;         /* можно задать фиксированную ширину */
+    background-color: rgba(0,0,0,0.7); /* полупрозрачный фон, чтобы не сливался с игрой */
+    padding: 10px;
+    border-radius: 8px;
+    color: #fff;          /* текст по умолчанию белый */
+    text-align: center;   /* заголовок и контент по центру */
+    align-items: center; /* центрируем всё по горизонтали */
+}
+
+#topPlayersTable {
+    border-collapse: collapse;
+    margin: 0 auto;       /* центрируем таблицу внутри контейнера */
+}
+
+#topPlayersContainer h2 {
+    text-align: center;
+}
+
+#topPlayersTable th {
+    background-color: #222;
+    color: #fff;
+    text-align: center; /* центрируем текст заголовка */
+}
+
+#topPlayersTable tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+    color: #000; /* текст чёрный */
+}
+
+#topPlayersTable tbody tr:nth-child(odd) {
+    background-color: #222; /* тёмный фон */
+    color: #fff; /* текст белый */
+}
+
+#topPlayersTable td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+    /* убрали color здесь */
+}
