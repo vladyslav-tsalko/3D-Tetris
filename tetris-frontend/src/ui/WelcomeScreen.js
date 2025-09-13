@@ -68,6 +68,10 @@ class WelcomeScreenHandler{
             serverManager.logout();
             this.setupWelcomeScreen();
         };
+
+        document.getElementById('closeErrorBtn').onclick = () => {
+            document.getElementById('errorModal').style.display = 'none';
+        };
     }
 
     #setupControlsButtons(){
@@ -106,17 +110,16 @@ class WelcomeScreenHandler{
             serverManager.register(this.#registerInputHandler.getUsername(), this.#registerInputHandler.getPassword())
             .then(res => {
                 if(res.success){
-                    console.log("✅ Successfully registered:", res);
                     localStorage.setItem("jwt", res.data?.token);
                     this.#registerInputHandler.removeInputErrors();
                     this.#registerModal.style.display = "none";
                     this.setupWelcomeScreen();
                 }else{
-                    console.log(`⚠️ Warning, status ${res.status}, message: ${res.message}`);
+                    this.#showPopUpError(`⚠️ Warning, status ${res.status}, message: ${res.message}`);
                 }
             })
             .catch(err => {
-                console.error("❌ Error:", err);
+                this.#showPopUpError("❌ Error:", err);
             });
         };
 
@@ -135,17 +138,16 @@ class WelcomeScreenHandler{
             serverManager.login(this.#loginInputHandler.getUsername(), this.#loginInputHandler.getPassword())
             .then(res => {
                 if(res.success){
-                    console.log("✅ Successfully logged in:", res);
                     localStorage.setItem("jwt", res.data?.token);
                     this.#loginInputHandler.removeInputErrors();
                     this.#loginModal.style.display = "none";
                     this.setupWelcomeScreen();
                 }else{
-                    console.log(`⚠️ Warning, status ${res.status}, message: ${res.message}`);
+                    this.#showPopUpError(`⚠️ Warning, status ${res.status}, message: ${res.message}`);
                 }
             })
             .catch(err => {
-                console.error("❌ Error:", err);
+                this.#showPopUpError("❌ Error:", err);
             });
         };
 
@@ -165,14 +167,13 @@ class WelcomeScreenHandler{
         serverManager.loadTopPlayers()
         .then(res => {
             if(res.success){
-                console.log("✅ Successfully received record table");
                 this.#showRecordTable(res.data);
             }else{
-                console.log(`⚠️ Warning, status ${res.status}, message: ${res.message}`);
+                this.#showPopUpError(`⚠️ Warning, status ${res.status}, message: ${res.message}`);
             }
         })
         .catch(err => {
-            console.error("❌ Error:", err);
+            this.#showPopUpError("❌ Error:", err);
         });
 
         let score = 0;
@@ -180,14 +181,13 @@ class WelcomeScreenHandler{
         .then(res => {
             if(res.success){
                 score = res.data?.score;
-                console.log("✅ Successfully received score: ", score);
                 this.#userInfo.textContent += `\nMax Score: ${score}`;
             }else{
-                console.log(`⚠️ Warning, status ${res.status}, message: ${res.message}`);
+                this.#showPopUpError(`⚠️ Warning, status ${res.status}, message: ${res.message}`);
             }
         })
         .catch(err => {
-            console.error("❌ Error:", err);
+            this.#showPopUpError("❌ Error:", err);
         });
 
 
@@ -245,6 +245,11 @@ class WelcomeScreenHandler{
 
     #toggleWelcomeLogged(toggle){
         this.#welcomeLoggedDiv.style.display = toggle ? "flex" : "none";
+    }
+
+    #showPopUpError(message){
+        document.getElementById('errorModal').style.display = 'flex';
+        document.getElementById('errorMessage').textContent = message;
     }
 }
 

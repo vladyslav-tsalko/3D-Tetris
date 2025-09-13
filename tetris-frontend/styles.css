@@ -382,3 +382,56 @@
     text-align: center;
     /* убрали color здесь */
 }
+
+/*----------POP-UP----------*/
+
+/* Затемнение фона */
+#errorModal{
+    display: none;
+}
+
+.error-popup {
+  display: none; /* Скрыто по умолчанию */
+  position: fixed;
+  z-index: 1000;
+  inset: 0; /* заменяет top/left/right/bottom */
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center; /* центрируем по вертикали */
+  justify-content: center; /* центрируем по горизонтали */
+}
+
+/* Содержимое окна */
+.error-popup-content {
+  background-color: #222; /* тёмный фон */
+  color: #fff;
+  padding: 20px 25px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+  display: inline-block; /* ширина по содержимому */
+  max-width: 400px; /* максимум 400px */
+  width: auto; /* авто ширина */
+  word-wrap: break-word;
+}
+
+
+.error-popup-content h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+/* Кнопка */
+#closeErrorBtn {
+  background-color: #444;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  margin-top: 15px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+#closeErrorBtn:hover {
+  background-color: #555;
+}
