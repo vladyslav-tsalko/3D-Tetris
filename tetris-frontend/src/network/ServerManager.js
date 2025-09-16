@@ -1,6 +1,6 @@
 class ServerManager {
     constructor() {
-        this.apiUrl = "http://localhost:8080/api"; // твой Spring backend
+        this.apiUrl = "http://localhost:9090/api"; // твой Spring backend
     }
 
     async register(username, password) {
