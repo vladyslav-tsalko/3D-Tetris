@@ -32,8 +32,8 @@ Frontend (WebGL) → REST API (Spring Boot) → Database
 - Open `index.html` in Chrome **or** run via Live Server in VS Code.   
 
 #### Backend  
-- run Spring Boot app (default: localhost:8080)
-- configure DB in application.properties
+- Run Spring Boot app (default: localhost:8080)
+- Configure DB in application.properties
 
 ## Technologies  
 
