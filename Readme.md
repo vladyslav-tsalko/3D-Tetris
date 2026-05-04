@@ -2,8 +2,8 @@
 
 3D Tetris game built with WebGL and JavaScript, backed by a Spring Boot API for authentication, user accounts, and persistent high scores.
 
-<img src="docs/images/MainMenu.png" width="700"/>
 <img src="docs/images/Gameplay.png" width="700"/>
+<img src="docs/images/MainMenu.png" width="400"/>
 
 ## Systems
 
