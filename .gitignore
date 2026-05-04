@@ -9,3 +9,6 @@ $RECYCLE.BIN/
 
 #VS Code
 .vscode
+
+#Scala
+.metals
